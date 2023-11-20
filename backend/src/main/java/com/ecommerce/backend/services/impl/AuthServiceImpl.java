@@ -187,7 +187,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     @Override
     public MessageResponse lockAccount(Long id) {
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id).orElseThrow(() -> new BadRequestException("Tài khoảng không tồn tại"));
         if (user.getIsLocked().equals(true)) {
             user.setIsLocked(false);
         } else {
