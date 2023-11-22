@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostParam {
+
     private Long categoryId;
     private LocalDateTime date;
     private String title;

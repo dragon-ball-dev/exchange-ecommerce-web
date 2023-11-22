@@ -18,12 +18,12 @@ public class Follow implements Serializable {
     @Id
     @ManyToOne
     @JoinColumn(name = "follower_id")
-    private User follower;
-
+    private User followerId;
+    // người theo dõi
     @Id
     @ManyToOne
     @JoinColumn(name = "following_id")
-    private User following;
-
+    private User followingId;
+    // người được theo dõi
     private static final long serialVersionUID = 1L;
 }

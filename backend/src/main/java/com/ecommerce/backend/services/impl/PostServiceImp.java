@@ -1,10 +1,10 @@
 package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.dto.PostDTO;
+import com.ecommerce.backend.domain.enums.FilterSortUser;
 import com.ecommerce.backend.domain.models.Category;
 import com.ecommerce.backend.domain.models.Post;
 import com.ecommerce.backend.domain.models.User;
-import com.ecommerce.backend.domain.param.PostParam;
 import com.ecommerce.backend.mapper.CommonMapper;
 import com.ecommerce.backend.repository.CategoryRepository;
 import com.ecommerce.backend.repository.PostRepository;
@@ -62,10 +62,10 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public Page<PostDTO> getPagingPostFilter(PostParam postParam, Integer pageNo, Integer pageSize) {
+    public Page<PostDTO> getPagingPostFilter(Long category, Integer sortBy, FilterSortUser filterSortUser, Integer pageNo, Integer pageSize, Long userId) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Post> postPage = postRepositoryCustom.getAllPostForParam(postParam, pageable);
+        Page<Post> postPage = postRepositoryCustom.getAllPostForParam(category,sortBy,filterSortUser, pageable,userId);
         return mapper.convertToResponsePage(postPage, PostDTO.class, pageable);
     }
 
