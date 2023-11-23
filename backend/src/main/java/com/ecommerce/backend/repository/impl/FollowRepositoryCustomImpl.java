@@ -19,7 +19,7 @@ public class FollowRepositoryCustomImpl implements FollowRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
 
-    private static final String FROM_REQUEST = " from rental_home.follow f ";
+    private static final String FROM_REQUEST = " from ecommerce.follow f ";
     @Override
     public Page<Follow> getPageFollow(Long userId, Pageable pageable) {
 
@@ -30,12 +30,12 @@ public class FollowRepositoryCustomImpl implements FollowRepositoryCustom {
         Map<String, Object> params = new HashMap<>();
 
         if (Objects.nonNull(userId)) {
-            strQuery.append(" AND f.customer_id = :userId");
+            strQuery.append(" AND f.following_id = :userId");
             params.put("userId", userId);
         }
         String strSelectQuery = "SELECT * " + strQuery;
 
-        String strCountQuery = "SELECT COUNT(DISTINCT f.id)" + strQuery;
+        String strCountQuery = "SELECT COUNT(*)" + strQuery;
         return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Follow.class);
 
     }

@@ -77,7 +77,7 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public void updatePost(Long id, Long userId, PostDTO postDTO) {
+    public void updatePost(Long id, PostDTO postDTO) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post is not exist!"));
         post.setUpdatedAt(LocalDateTime.now());
         Category category = categoryRepository.findById(postDTO.getCategoryId()).orElseThrow(() -> new IllegalArgumentException("category is not exist!"));

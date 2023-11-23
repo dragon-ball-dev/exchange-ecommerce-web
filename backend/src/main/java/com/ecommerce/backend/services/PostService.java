@@ -9,7 +9,7 @@ public interface PostService {
     Page<PostDTO> getPagingPost( Integer pageNo, Integer pageSize);
     Page<PostDTO> getPagingPostFilter(Long category, Integer sortBy, FilterSortUser filterSortUser, Integer pageNo, Integer pageSize, Long userId);
     PostDTO getPostById(Long id);
-    void updatePost(Long id,Long userId,PostDTO postDTO);
+    void updatePost(Long id, PostDTO postDTO);
     void lockPost(Long id);
     void unlockPost(Long id);
 
