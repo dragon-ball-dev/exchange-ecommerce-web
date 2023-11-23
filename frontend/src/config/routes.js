@@ -1,5 +1,15 @@
 const routes = {
-    admin: {},
+    admin: {
+        profile: '/admin/profile',
+        dashboard: '/admin/dashboard',
+        account: '/admin/account',
+        post: '/admin/post',
+        report: '/admin/report',
+        trade: '/admin/trade',
+        info: '/admin/info',
+        setting: '/admin/setting',
+        auto: '/admin/auto',
+    },
     web: {
         home: '/',
         about: '/about',
