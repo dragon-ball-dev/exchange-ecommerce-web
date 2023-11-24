@@ -1,4 +1,4 @@
-const CreatePostPage = () => {
+const CreateISOPage = () => {
     return (
         <div className="container w-1/2 mx-auto mt-10">
             <div className="justify-center items-stretch flex flex-col">
@@ -7,7 +7,7 @@ const CreatePostPage = () => {
                         <div className="flex flex-col items-stretch w-[38%] max-md:w-full max-md:ml-0">
                             <div className="flex flex-col items-stretch px-5 max-md:mt-3">
                                 <div className="text-gray-800 text-4xl font-black leading-10 whitespace-nowrap -mr-5">
-                                    Create a new post
+                                    Create a new ISO
                                 </div>
                                 <div className="flex flex-col items-stretch -mr-5 mt-8 pt-12 pb-8 px-16 rounded-2xl border-4 border-dashed border-indigo-50 max-md:px-5">
                                     <img
@@ -69,46 +69,11 @@ const CreatePostPage = () => {
                         <div className="flex items-stretch gap-2.5 my-auto">
                             <img
                                 loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/ba89b8e9-5040-402a-8f96-3c2bfd63fddb?apiKey=b570640ca9b549a79647f94d6104bae5&"
-                                className="aspect-square object-contain object-center w-6 overflow-hidden shrink-0 max-w-full"
-                            />
-                            <div className="text-gray-800 text-xl leading-6 whitespace-nowrap">
-                                Meeting Spot
-                            </div>
-                        </div>
-                        <div className="text-violet-700 text-center text-xl font-bold leading-[52px] self-stretch">
-                            Select
-                        </div>
-                    </div>
-                    <div className="max-w-[443px] text-gray-800 text-base leading-6 self-stretch -mr-5 mt-1.5 px-5 border-l-2 border-l-rose-500 border-solid max-md:max-w-full">
-                        You don’t have any meeting spots yet. Add at least one meeting
-                        <br />
-                        spot, and your post will see people around.
-                    </div>
-                    <div className="items-center self-center flex w-full justify-between gap-5 mt-4 rounded-2xl max-md:max-w-full max-md:flex-wrap">
-                        <div className="flex items-stretch gap-2.5 my-auto">
-                            <img
-                                loading="lazy"
                                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/23a8e813-aecc-4947-9c84-1a26128afaf3?apiKey=b570640ca9b549a79647f94d6104bae5&"
                                 className="aspect-square object-contain object-center w-6 overflow-hidden shrink-0 max-w-full"
                             />
                             <div className="text-gray-800 text-xl leading-6 whitespace-nowrap">
                                 Category
-                            </div>
-                        </div>
-                        <div className="text-violet-700 text-center text-xl font-bold leading-[52px] self-stretch">
-                            Select
-                        </div>
-                    </div>
-                    <div className="items-center self-center flex w-full justify-between gap-5 mt-4 rounded-2xl max-md:max-w-full max-md:flex-wrap">
-                        <div className="flex items-stretch gap-2.5 my-auto">
-                            <img
-                                loading="lazy"
-                                src="https://cdn.builder.io/api/v1/image/assets/TEMP/d2fd0a4a-b8d7-49be-bc7e-696b4397e0d0?apiKey=b570640ca9b549a79647f94d6104bae5&"
-                                className="aspect-square object-contain object-center w-6 overflow-hidden shrink-0 max-w-full"
-                            />
-                            <div className="text-gray-800 text-xl leading-6 whitespace-nowrap">
-                                Item condition
                             </div>
                         </div>
                         <div className="text-violet-700 text-center text-xl font-bold leading-[52px] self-stretch">
@@ -128,4 +93,4 @@ const CreatePostPage = () => {
         </div>
     );
 };
-export default CreatePostPage;
+export default CreateISOPage;

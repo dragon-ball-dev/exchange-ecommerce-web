@@ -1,12 +1,12 @@
 import Head from '../../../layouts/Admin/components/Head';
 import config from '../../../config';
 
-function CategoryHead() {
+function ItemConditionHead() {
     return (
         <Head
-            title={'Quản lý danh mục'}
+            title={'Quản lý điều kiện sản phẩm'}
         />
     );
 }
 
-export default CategoryHead;
+export default ItemConditionHead;

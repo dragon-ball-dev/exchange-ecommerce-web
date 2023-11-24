@@ -9,7 +9,9 @@ import {
     IconSettings,
     IconAutomaticGearbox,
     IconInfoCircle,
-    Icon24Hours
+    Icon24Hours,
+    IconCategory,
+    IconConeOff
 } from '@tabler/icons-react';
 import { Menu } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,6 +20,8 @@ const items = [
     getItem('Trang chủ', config.routes.admin.dashboard, <IconHome2 />),
     getItem('Người dùng', config.routes.admin.account, <IconFingerprint />),
     getItem('Duyệt bài viết', config.routes.admin.post, <Icon24Hours />),
+    getItem('Danh mục', config.routes.admin.category, <IconCategory />),
+    getItem('Điều kiện sản phẩm', config.routes.admin.condition, <IconConeOff />),
     getItem('Báo cáo', config.routes.admin.report, <IconReportAnalytics />),
     getItem('Lượt trao đổi', config.routes.admin.trade, <IconBrandCashapp />),
     getItem('Thông tin', config.routes.admin.info, <IconInfoCircle />),

@@ -1,7 +1,70 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import config from '../../../config';
+import { useState } from 'react';
+import { Form, Input, notification } from 'antd';
+import { useLogin } from '../../../hooks/api/useAuthApi';
+
+import {saveToken, getRoles, isTokenStoraged} from '../../../utils/storage';
+import FormItem from 'antd/es/form/FormItem';
 
 const LoginPage = () => {
+    const [processing, setProcessing] = useState(false);
+    const [form] = Form.useForm();
+    const navigate = useNavigate();
+
+    const handleToken = (token) => {
+        saveToken(token);
+        let roles = getRoles();
+        let url = '/';
+
+        if (roles?.includes('ADMIN')) url = config.routes.admin.dashboard;
+        notification.success({
+            message: 'Đăng nhập thành công',
+            description: 'Chào mừng bạn đến với hệ thống của chúng tôi',
+        });
+        navigate(url);
+    };
+
+    const mutationLogin = useLogin({
+        success: (data) => {
+            handleToken(data);
+        },
+        error: (err) => {
+            console.log(err)
+            let description = 'Không thể đăng nhập, vui lòng liên hệ Quản trị viên';
+            let detail = err?.response?.data?.message;
+            if (detail) {
+                description = detail;
+            }
+            notification.error({
+                message: 'Đăng nhập thất bại',
+                description,
+            });
+            
+        },
+        mutate: (data) => {
+            setProcessing(true);
+        },
+        settled: (data) => {
+            setProcessing(false);
+        },
+    });
+    const onLogin = async () => {
+        await mutationLogin.mutateAsync({
+            email: form.getFieldValue('email'),
+            password: form.getFieldValue('password'),
+        });
+    };
+
+    if (isTokenStoraged()) {
+        let roles = getRoles();
+        let url = config.routes.web.home;
+
+        if (roles?.includes('ADMIN')) url = config.routes.admin.dashboard;
+
+        return <Navigate to={url} replace />;
+    }
+
     return (
         <div>
             <main className="bg-white">
@@ -24,33 +87,52 @@ const LoginPage = () => {
                             <h1 className="text-gray-800 text-[4rem] font-black leading-10 self-stretch whitespace-nowrap -mr-5 max-md:max-w-full">
                                 Login
                             </h1>
-                            <section className="items-stretch self-stretch flex flex-col -mr-5 mt-6 max-md:max-w-full">
-                                <h2 className="text-gray-800 text-2xl font-bold leading-7 whitespace-nowrap max-md:max-w-full">
-                                    Email
-                                </h2>
-                                <div className="text-gray-500 text-3xl leading-6 tracking-normal whitespace-nowrap bg-violet-50 mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
-                                    <input
-                                        type="email"
-                                        placeholder="example@gmail.com"
-                                        className="w-full text-3xl bg-violet-50 focus:outline-none"
-                                    />
-                                </div>
-                            </section>
-                            <section className="items-stretch self-stretch flex flex-col -mr-5 mt-6 max-md:max-w-full">
-                                <h2 className="text-gray-800 text-2xl font-bold leading-7 whitespace-nowrap max-md:max-w-full">
-                                    Password
-                                </h2>
-                                <div className="text-gray-500 text-3xl leading-6 tracking-normal whitespace-nowrap bg-violet-50 mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
-                                    <input
-                                        type="password"
-                                        placeholder="Your password"
-                                        className="w-full text-3xl bg-violet-50 focus:outline-none"
-                                    />
-                                </div>
-                            </section>
-                            <button className="text-gray-800 text-center text-3xl font-bold leading-[52px] items-center bg-yellow-300 w-1/2 mt-6 px-5 rounded-[52px] self-start max-md:max-w-full">
-                                Login
-                            </button>
+                            <Form className="w-full" form={form} onFinish={onLogin}>
+                                <section className="items-stretch self-stretch flex flex-col max-md:max-w-full">
+                                    <h2 className="text-gray-800 text-2xl font-bold  whitespace-nowrap max-md:max-w-full">
+                                        Email
+                                    </h2>
+                                    <FormItem
+                                        name={'email'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                            {
+                                                type: 'email',
+                                            },
+                                        ]}
+                                    >
+                                        <div className="text-gray-500 tracking-normal whitespace-nowrap mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
+                                            <Input className="w-full text-[1.6rem] border border-solid " />
+                                        </div>
+                                    </FormItem>
+                                </section>
+                                <section className="items-stretch self-stretch flex flex-col -mr-5 max-md:max-w-full">
+                                    <h2 className="text-gray-800 text-2xl font-bold  whitespace-nowrap max-md:max-w-full">
+                                        Password
+                                    </h2>
+
+                                    <FormItem
+                                        name={'password'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                        ]}
+                                    >
+                                        <div className="text-gray-500 tracking-normal whitespace-nowrap mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
+                                            <Input.Password className="w-full text-[1.6rem] border border-solid " />
+                                        </div>
+                                    </FormItem>
+                                </section>
+                                <button
+                                    type="submit"
+                                    className="text-gray-800 text-center text-3xl font-bold leading-[52px] items-center bg-yellow-300 w-1/2 mt-6 px-5 rounded-[52px] self-start max-md:max-w-full"
+                                >
+                                    Login
+                                </button>
+                            </Form>
                             <div className="text-gray-500 text-2xl font-bold leading-6 self-stretch whitespace-nowrap -mr-5 mt-14 max-md:max-w-full max-md:mt-10">
                                 or continue with
                             </div>

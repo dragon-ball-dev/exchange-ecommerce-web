@@ -20,11 +20,11 @@ function Header() {
     };
 
     return (
-        <div className="header-container w-screen fixed z-10 bg-white border-b-[1px]">
+        <div className="header-container w-screen fixed bg-white border-b-[1px] z-[1000] py-[0.7rem]">
             <div className="container mx-auto h-[--height-header-admin] flex items-center justify-between">
                 <div className="h-full">
-                    <Link>
-                        <img className="h-full" src="" alt="logo" />
+                    <Link to={config.routes.admin.dashboard}>
+                        <img className="h-full" src="https://cdn.builder.io/api/v1/image/assets/TEMP/9fdfd2b7-d6e4-4639-a36f-c16542ea71fc?apiKey=b570640ca9b549a79647f94d6104bae5&" alt="logo" />
                     </Link>
                 </div>
                 <div className="text-[1.4rem] font-medium flex items-center justify-between">
