@@ -28,7 +28,6 @@ public class PostRepositoryCustomImp implements PostRepositoryCustom {
     public Page<Post> getAllPostForParam(Long category, Integer sortBy, FilterSortUser filterSortUser, Pageable pageable, Long userId) {
         StringBuilder strQuery = new StringBuilder();
         StringBuilder joinQuery = new StringBuilder();
-        strQuery.append(FROM_POST);
         strQuery.append("WHERE 1=1");
 
         Map<String, Object> params = new HashMap<>();
@@ -43,8 +42,8 @@ public class PostRepositoryCustomImp implements PostRepositoryCustom {
             strQuery.append("AND p.user_id = :userId");
             params.put("userId", userId);
         }
-        String selectQuery = "SELECT * " + strQuery;
-        String countQuery = "SELECT COUNT(DISTINCT c.id)" + strQuery;
+        String selectQuery = "SELECT * " + FROM_POST + joinQuery + strQuery;
+        String countQuery = "SELECT COUNT(DISTINCT c.id)"+ FROM_POST + joinQuery + strQuery;
 
 
         return BaseRepository.getPagedNativeQuery(em, selectQuery, countQuery, params, pageable, Post.class);

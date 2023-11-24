@@ -92,7 +92,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         user.setIsLocked(false);
         user.setIsConfirmed(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        sendEmailConfirmed(signUpRequest.getEmail(),signUpRequest.getName());
+//        sendEmailConfirmed(signUpRequest.getEmail(),signUpRequest.getName());
 
         if (RoleName.ROLE_USER.equals(signUpRequest.getRole())) {
             Role userRole = roleRepository.findByName(RoleName.ROLE_USER)

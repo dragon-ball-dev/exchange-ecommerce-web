@@ -75,5 +75,5 @@ public class User extends DateAudit {
 	private Set<Role> roles = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_rank_id", nullable = false)
+	@JoinColumn(name = "user_rank_id", columnDefinition = "int default 1")
 	private UserRank userRank;}
