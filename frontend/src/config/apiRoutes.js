@@ -1,5 +1,11 @@
 const apiRoutes = {
-    common: {},
+    common: {auth: {
+        login: '/auth/login',
+        register: '/auth/signup',
+    },
+    user: {
+        me: '/user/me',
+    },},
     admin: {},
     web: {},
 };

@@ -1,7 +1,61 @@
-import { NavLink } from "react-router-dom";
-import config from "../../../config";
+import { NavLink, Navigate } from 'react-router-dom';
+import config from '../../../config';
+import { Button, Form, Input, notification } from 'antd';
+import FormItem from 'antd/es/form/FormItem';
+import { useRegister } from '../../../hooks/api/useAuthApi';
+import { useState } from 'react';
+import { isTokenStoraged } from '../../../utils/storage';
 
 const RegisterPage = () => {
+    const [processing, setProcessing] = useState(false);
+    const [form] = Form.useForm();
+    const mutationRegister = useRegister({
+        success: (data) => {
+            notification.success({
+                message: 'Đăng ký thành công',
+                description:
+                    'Bạn đã đăng ký thành công tài khoản, vui lòng lấy mã OTP để xác thực tài khoản',
+            });
+            navigate(config.routes.web.otp_verify + '?email=' + form.getFieldValue('email'));
+        },
+        error: (err) => {
+            let description = 'Có lỗi xảy ra khi đăng ký, vui lòng thử lại sau';
+            let detail = err?.response?.data?.message;
+            if (detail) {
+                description = err?.response?.data?.message;
+            }
+            notification.error({
+                message: 'Đăng ký thất bại',
+                description: err?.response?.data?.message,
+            });
+        },
+        mutate: () => {
+            setProcessing(true);
+        },
+        settled: () => {
+            setProcessing(false);
+        },
+    });
+
+    const onRegister = async () => {
+        await mutationRegister.mutateAsync({
+            email: form.getFieldValue('email'),
+            password: form.getFieldValue('password'),
+            name: form.getFieldValue('name'),
+            confirmPassword: form.getFieldValue('confirmPassword'),
+            role: ' ROLE_USER',
+        });
+    };
+
+    if (isTokenStoraged()) {
+        let roles = getRoles();
+        let url = '/';
+
+        if (roles.includes('ADMIN')) url = config.routes.admin.dashboard;
+
+        return <Navigate to={url} replace />;
+    }
+
     return (
         <div>
             <main className="bg-white">
@@ -24,33 +78,102 @@ const RegisterPage = () => {
                             <h1 className="text-gray-800 text-[4rem] font-black leading-10 self-stretch whitespace-nowrap -mr-5 max-md:max-w-full">
                                 Sign up
                             </h1>
-                            <section className="items-stretch self-stretch flex flex-col -mr-5 mt-6 max-md:max-w-full">
-                                <h2 className="text-gray-800 text-2xl font-bold leading-7 whitespace-nowrap max-md:max-w-full">
-                                    Email
-                                </h2>
-                                <div className="text-gray-500 text-3xl leading-6 tracking-normal whitespace-nowrap bg-violet-50 mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
-                                    <input
-                                        type="email"
-                                        placeholder="example@gmail.com"
-                                        className="w-full text-3xl bg-violet-50 focus:outline-none"
-                                    />
-                                </div>
-                            </section>
-                            <section className="items-stretch self-stretch flex flex-col -mr-5 mt-6 max-md:max-w-full">
-                                <h2 className="text-gray-800 text-2xl font-bold leading-7 whitespace-nowrap max-md:max-w-full">
-                                    Password
-                                </h2>
-                                <div className="text-gray-500 text-3xl leading-6 tracking-normal whitespace-nowrap bg-violet-50 mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
-                                    <input
-                                        type="password"
-                                        placeholder="Your password"
-                                        className="w-full text-3xl bg-violet-50 focus:outline-none"
-                                    />
-                                </div>
-                            </section>
-                            <button className="text-gray-800 text-center text-3xl font-bold leading-[52px] items-center bg-yellow-300 w-1/2 mt-6 px-5 rounded-[52px] self-start max-md:max-w-full">
-                                Join now
-                            </button>
+                            <Form className="w-full" form={form} onFinish={onRegister}>
+                                <section className="items-stretch self-stretch flex flex-col -mr-5 mt-6 max-md:max-w-full">
+                                    <h2 className="text-gray-800 text-2xl font-bold  whitespace-nowrap max-md:max-w-full">
+                                        Name
+                                    </h2>
+                                    <FormItem
+                                        name={'name'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                        ]}
+                                    >
+                                        <div className="text-gray-500 tracking-normal whitespace-nowrap mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
+                                            <Input className="w-full text-[1.6rem] border border-solid " />
+                                        </div>
+                                    </FormItem>
+                                </section>
+                                <section className="items-stretch self-stretch flex flex-col max-md:max-w-full">
+                                    <h2 className="text-gray-800 text-2xl font-bold  whitespace-nowrap max-md:max-w-full">
+                                        Email
+                                    </h2>
+                                    <FormItem
+                                        name={'email'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                            {
+                                                type: 'email',
+                                            },
+                                        ]}
+                                    >
+                                        <div className="text-gray-500 tracking-normal whitespace-nowrap mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
+                                            <Input className="w-full text-[1.6rem] border border-solid " />
+                                        </div>
+                                    </FormItem>
+                                </section>
+                                <section className="items-stretch self-stretch flex flex-col -mr-5 max-md:max-w-full">
+                                    <h2 className="text-gray-800 text-2xl font-bold  whitespace-nowrap max-md:max-w-full">
+                                        Password
+                                    </h2>
+
+                                    <FormItem
+                                        name={'password'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                        ]}
+                                    >
+                                        <div className="text-gray-500 tracking-normal whitespace-nowrap mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
+                                            <Input.Password className="w-full text-[1.6rem] border border-solid " />
+                                        </div>
+                                    </FormItem>
+                                </section>
+                                <section className="items-stretch self-stretch flex flex-col -mr-5 max-md:max-w-full">
+                                    <h2 className="text-gray-800 text-2xl font-bold  whitespace-nowrap max-md:max-w-full">
+                                        Confirm Password
+                                    </h2>
+
+                                    <FormItem
+                                        name={'confirmPassword'}
+                                        rules={[
+                                            {
+                                                required: true,
+                                            },
+                                            ({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    if (
+                                                        !value ||
+                                                        getFieldValue('password') === value
+                                                    ) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(
+                                                        new Error(
+                                                            'Confirm password does not match',
+                                                        ),
+                                                    );
+                                                },
+                                            }),
+                                        ]}
+                                    >
+                                        <div className="text-gray-500 tracking-normal whitespace-nowrap mt-1 px-3.5 py-4 rounded-2xl max-md:max-w-full">
+                                            <Input.Password className="w-full text-[1.6rem] border border-solid " />
+                                        </div>
+                                    </FormItem>
+                                </section>
+                                <button
+                                    type="submit"
+                                    className="text-gray-800 text-center text-3xl font-bold leading-[52px] items-center bg-yellow-300 w-1/2 mt-6 px-5 rounded-[52px] self-start max-md:max-w-full"
+                                >
+                                    Join now
+                                </button>
+                            </Form>
                             <div className="text-gray-500 text-2xl font-bold leading-6 self-stretch whitespace-nowrap -mr-5 mt-14 max-md:max-w-full max-md:mt-10">
                                 or continue with
                             </div>
@@ -83,7 +206,7 @@ const RegisterPage = () => {
                             <div className="text-violet-700 text-2xl leading-7 self-stretch whitespace-nowrap -mr-5 mt-24 max-md:max-w-full max-md:mt-10">
                                 <span className="text-gray-800">Already have an account? </span>
                                 <NavLink
-                                    to={config.routes.web.loading}
+                                    to={config.routes.web.login}
                                     className="font-bold text-violet-700"
                                 >
                                     Login

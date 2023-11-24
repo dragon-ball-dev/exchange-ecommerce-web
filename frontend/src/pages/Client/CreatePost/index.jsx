@@ -1,6 +1,6 @@
 const CreatePostPage = () => {
     return (
-        <div className="container max-w-[1280px] mx-auto mt-10">
+        <div className="container w-1/2 mx-auto mt-10">
             <div className="justify-center items-stretch flex flex-col">
                 <div className="w-full max-md:max-w-full">
                     <div className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">

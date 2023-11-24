@@ -44,10 +44,10 @@ const refreshToken = async (originalRequest) => {
         });
         if (!response) {
             localStorage.removeItem('token');
-            notification.error({
-                message: 'Thông báo',
-                description: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại',
-            });
+            // notification.error({
+            //     message: 'Thông báo',
+            //     description: 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại',
+            // });
             myHistory.replace(config.routes.web.login);
             return Promise.reject();
         }
@@ -59,10 +59,10 @@ const refreshToken = async (originalRequest) => {
     } catch (error) {
         myHistory.replace(config.routes.web.login);
         localStorage.removeItem('token');
-        notification.error({
-            message: 'Thông báo',
-            description: 'Bạn vui lòng đăng nhập để tiếp tục',
-        });
+        // notification.error({
+        //     message: 'Thông báo',
+        //     description: 'Bạn vui lòng đăng nhập để tiếp tục',
+        // });
         return Promise.reject(error);
     }
 };
