@@ -3,12 +3,15 @@ package com.ecommerce.backend.services.impl;
 
 import com.ecommerce.backend.domain.enums.AuthProvider;
 import com.ecommerce.backend.domain.enums.RoleName;
+import com.ecommerce.backend.domain.enums.UserRankConstant;
 import com.ecommerce.backend.domain.models.Role;
 import com.ecommerce.backend.domain.models.User;
+import com.ecommerce.backend.domain.models.UserRank;
 import com.ecommerce.backend.domain.payload.request.*;
 import com.ecommerce.backend.domain.payload.response.MessageResponse;
 import com.ecommerce.backend.exception.BadRequestException;
 import com.ecommerce.backend.repository.RoleRepository;
+import com.ecommerce.backend.repository.UserRankRepository;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.secruity.TokenProvider;
 import com.ecommerce.backend.services.AuthService;
@@ -49,6 +52,9 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    UserRankRepository userRankRepository;
 
 
     @Autowired
@@ -91,6 +97,11 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         user.setProvider(AuthProvider.local);
         user.setIsLocked(false);
         user.setIsConfirmed(false);
+
+        UserRank userRank = userRankRepository.findByRankValue(UserRankConstant.USER_RANK_FRESHER.getValue())
+                .orElseThrow(() -> new IllegalArgumentException("User Rank not set."));
+
+        user.setUserRank(userRank);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 //        sendEmailConfirmed(signUpRequest.getEmail(),signUpRequest.getName());
 
