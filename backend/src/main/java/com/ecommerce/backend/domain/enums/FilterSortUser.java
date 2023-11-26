@@ -3,7 +3,7 @@ package com.ecommerce.backend.domain.enums;
 public enum FilterSortUser {
     FOLLOW("follow"),
     TRADEDWITH("tradedwith"),
-        EVERYONE("everyone");
+    EVERYONE("everyone");
 
     private String value;
     FilterSortUser(String value) {

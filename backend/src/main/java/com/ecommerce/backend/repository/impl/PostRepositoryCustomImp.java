@@ -21,29 +21,29 @@ public class PostRepositoryCustomImp implements PostRepositoryCustom {
 
     private final static String FROM_POST = " FROM ecommerce.post p ";
     private final static String JOIN_FOLLOW = " LEFT JOIN ecommerce.follow f on p.user_id = f.following_id ";
-    private final static String JOIN_USER_FOLLOW = " LEFT JOIN ecommerce.user u on f.follower = u.id";
+    private final static String JOIN_USER_FOLLOW = " LEFT JOIN ecommerce.users u on f.follower_id = u.id ";
 
 
     @Override
     public Page<Post> getAllPostForParam(Long category, Integer sortBy, FilterSortUser filterSortUser, Pageable pageable, Long userId) {
         StringBuilder strQuery = new StringBuilder();
         StringBuilder joinQuery = new StringBuilder();
-        strQuery.append("WHERE 1=1");
+        strQuery.append("WHERE 1=1 ");
 
         Map<String, Object> params = new HashMap<>();
         if (Objects.nonNull(category)) {
-            strQuery.append("AND p.category_id = :categoryId");
+            strQuery.append(" AND p.category_id = :categoryId");
             params.put("categoryId", category);
         }
         //TODO: add filter parameter
         if (filterSortUser.getvalue().equals("follow")) {
             joinQuery.append(JOIN_FOLLOW)
                     .append(JOIN_USER_FOLLOW);
-            strQuery.append("AND p.user_id = :userId");
+            strQuery.append(" AND u.id = :userId");
             params.put("userId", userId);
         }
         String selectQuery = "SELECT * " + FROM_POST + joinQuery + strQuery;
-        String countQuery = "SELECT COUNT(DISTINCT c.id)"+ FROM_POST + joinQuery + strQuery;
+        String countQuery = "SELECT COUNT(DISTINCT p.id) "+ FROM_POST + joinQuery + strQuery;
 
 
         return BaseRepository.getPagedNativeQuery(em, selectQuery, countQuery, params, pageable, Post.class);

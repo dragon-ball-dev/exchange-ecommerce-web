@@ -10,6 +10,7 @@ import com.ecommerce.backend.repository.CategoryRepository;
 import com.ecommerce.backend.repository.PostRepository;
 import com.ecommerce.backend.repository.PostRepositoryCustom;
 import com.ecommerce.backend.repository.UserRepository;
+import com.ecommerce.backend.services.BaseService;
 import com.ecommerce.backend.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class PostServiceImp implements PostService {
+public class PostServiceImp extends BaseService implements PostService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final PostRepository postRepository;
@@ -41,15 +42,15 @@ public class PostServiceImp implements PostService {
         if (postDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(postDTO.getCategoryId())
                     .orElseThrow(() -> new IllegalArgumentException("Category is not exist!"));
-            post.setCategoryId(post.getCategoryId());
+            post.setCategoryId(category);
         }
-        if (postDTO.getUserId() != null) {
-            User user = userRepository.findById(postDTO.getUserId())
-                    .orElseThrow(() -> new IllegalArgumentException("User is not exist!"));
-            post.setUserId(post.getUserId());
-            post.setCreatedAt(LocalDateTime.now());
-            postRepository.save(post);
-        }
+
+        User user = userRepository.findById(getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User is not exist!"));
+        post.setUserId(user);
+        post.setCreatedAt(LocalDateTime.now());
+        postRepository.save(post);
+
 
     }
 
@@ -62,10 +63,10 @@ public class PostServiceImp implements PostService {
     }
 
     @Override
-    public Page<PostDTO> getPagingPostFilter(Long category, Integer sortBy, FilterSortUser filterSortUser, Integer pageNo, Integer pageSize, Long userId) {
+    public Page<PostDTO> getPagingPostFilter(Long category, Integer sortBy, FilterSortUser filterSortUser, Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Post> postPage = postRepositoryCustom.getAllPostForParam(category,sortBy,filterSortUser, pageable,userId);
+        Page<Post> postPage = postRepositoryCustom.getAllPostForParam(category,sortBy,filterSortUser, pageable,getUserId());
         return mapper.convertToResponsePage(postPage, PostDTO.class, pageable);
     }
 

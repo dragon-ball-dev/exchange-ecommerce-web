@@ -96,7 +96,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
         user.setIsLocked(false);
-        user.setIsConfirmed(false);
+        user.setIsConfirmed(true);
 
         UserRank userRank = userRankRepository.findByRankValue(UserRankConstant.USER_RANK_FRESHER.getValue())
                 .orElseThrow(() -> new IllegalArgumentException("User Rank not set."));
@@ -225,7 +225,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
     public void sendEmailFromTemplate(String email) throws MessagingException, IOException {
 
         MimeMessage message = mailSender.createMimeMessage();
-        message.setFrom(new InternetAddress("khanhhn.hoang@gmail.com"));
+        message.setFrom(new InternetAddress("Khanhak54@gmail.com"));
         message.setRecipients(MimeMessage.RecipientType.TO, email);
         message.setSubject("Yêu cầu cấp lại mật khẩu!!!");
 
@@ -242,7 +242,7 @@ public class AuthServiceImpl extends BaseService implements AuthService {
 
     public void sendEmailConfirmed(String email,String name) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
-        message.setFrom(new InternetAddress("khanhhn.hoang@gmail.com"));
+        message.setFrom(new InternetAddress("Khanhak54@gmail.com"));
         message.setRecipients(MimeMessage.RecipientType.TO, email);
         message.setSubject("Xác thực tài khoản.");
 

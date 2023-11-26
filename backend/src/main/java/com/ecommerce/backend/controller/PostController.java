@@ -10,17 +10,20 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/post")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class PostController extends BaseController {
     private final PostService postService;
 
-    @GetMapping("/post")
+    @GetMapping
     @Operation(summary = "get paging of post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
             content = {@Content(mediaType = "application/json",
@@ -36,7 +39,7 @@ public class PostController extends BaseController {
         return ResponseEntity.ok(postService.getPagingPost(pageNo, pageSize));
     }
 
-    @GetMapping("/post/filter")
+    @GetMapping("/filter")
     @Operation(summary = "filter sort for post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
             content = {@Content(mediaType = "application/json",
@@ -52,11 +55,10 @@ public class PostController extends BaseController {
             @RequestParam Integer sortBy,
             @RequestParam Long category ,
             @RequestParam Integer pageNo,
-            @RequestParam Integer pageSize,
-            @RequestParam Long userId){
-        return createSuccessResponse("Create a new car",postService.getPagingPostFilter(category, sortBy,filterSortUser, pageNo, pageSize,userId ));
+            @RequestParam Integer pageSize){
+        return createSuccessResponse("Create a new car",postService.getPagingPostFilter(category, sortBy,filterSortUser, pageNo, pageSize ));
     }
-    @PostMapping("/post")
+    @PostMapping
     @Operation(summary = "create a new post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
             content = {@Content(mediaType = "application/json",
@@ -74,7 +76,7 @@ public class PostController extends BaseController {
        return createSuccessResponse("Create a new post", HttpStatus.CREATED);
     }
 
-    @PutMapping("/post/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "update post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
             content = {@Content(mediaType = "application/json",
