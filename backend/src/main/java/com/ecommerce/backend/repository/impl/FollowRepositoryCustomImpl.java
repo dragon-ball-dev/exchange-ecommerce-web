@@ -30,7 +30,7 @@ public class FollowRepositoryCustomImpl implements FollowRepositoryCustom {
         Map<String, Object> params = new HashMap<>();
 
         if (Objects.nonNull(userId)) {
-            strQuery.append(" AND f.following_id = :userId");
+            strQuery.append(" AND f.follower_id = :userId");
             params.put("userId", userId);
         }
         String strSelectQuery = "SELECT * " + strQuery;

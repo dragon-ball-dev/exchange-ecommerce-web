@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "follow")
@@ -14,20 +13,18 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(Follow.class)
-public class Follow implements Serializable {
+public class Follow extends BaseEntity{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "follower_id")
-    private User followerId;
+    private User follower;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "following_id")
-    private User followingId;
-
-
-    private static final long serialVersionUID = 1L;
+    private User following;
 
 }

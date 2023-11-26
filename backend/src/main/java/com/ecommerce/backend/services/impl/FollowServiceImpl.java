@@ -30,13 +30,14 @@ public class FollowServiceImpl extends BaseService implements FollowService {
     public MessageResponse addFollow(FollowRequest followRequest) {
         User follower = userRepository.findById(getUserId()).orElseThrow(()-> new IllegalArgumentException("Tài khoảng không tồn tại"));
         User following = userRepository.findById(followRequest.getFollowingId()).orElseThrow(() -> new IllegalArgumentException("Tài khoảng không tồn tại"));
-        Optional<Follow> followOptional = followRepository.findByFollowerIdAndFollowerId(follower, following);
+        Optional<Follow> followOptional = followRepository.findByFollowerAndFollowing(follower, following);
+
         if (followOptional.isPresent()) {
             throw new IllegalArgumentException("User đã được theo dõi.");
         }
         Follow follow = new Follow();
-        follow.setFollowerId(follower);
-        follow.setFollowingId(following);
+        follow.setFollower(follower);
+        follow.setFollowing(following);
         followRepository.save(follow);
         return MessageResponse.builder().message("Đã theo dõi.").build();
     }
