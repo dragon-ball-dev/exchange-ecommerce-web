@@ -21,6 +21,7 @@ import InformationPage from "../pages/Admin/Information";
 import SettingPage from "../pages/Admin/Setting";
 import CategoryPage from "../pages/Admin/Category";
 import ItemConditionPage from "../pages/Admin/ItemCondition";
+import ProfileSettingPage from "../pages/Client/ProfileSetting";
 
 
 const publicRoutes = [
@@ -66,12 +67,29 @@ const publicRoutes = [
         roles: ['USER'],
         private: false,
     },
+    
+];
+const privateRoutes = [
     {
         path: config.routes.web.chat,
         component: ChatPage,
         layout: ClientLayout,
         roles: ['USER'],
         private: false,
+    },
+    {
+        path: config.routes.web.settings,
+        component: ProfileSettingPage,
+        layout: ClientLayout,
+        roles: ['USER'],
+        private: true,
+    },
+    {
+        path: config.routes.web.settings + '/:tagFunction',
+        component: ProfileSettingPage,
+        layout: ClientLayout,
+        roles: ['USER'],
+        private: true,
     },
     {
         path: config.routes.web.profile,
@@ -101,8 +119,6 @@ const publicRoutes = [
         roles: ['USER'],
         private: false,
     },
-];
-const privateRoutes = [
     {
         path: config.routes.admin.dashboard,
         component: DashboardPage,

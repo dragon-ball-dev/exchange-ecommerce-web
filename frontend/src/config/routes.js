@@ -17,6 +17,7 @@ const routes = {
         about: '/about',
         explore: '/explore',
         profile: '/profile',
+        settings: '/settings/profile',
         create_post: '/post/new',
         create_iso: '/iso/new',
         chat: '/chat',
