@@ -1,5 +1,6 @@
 package com.ecommerce.backend.repository.impl;
 
+import com.ecommerce.backend.domain.enums.ReportStatus;
 import com.ecommerce.backend.domain.models.Post;
 import com.ecommerce.backend.domain.models.Report;
 import com.ecommerce.backend.repository.BaseRepository;
@@ -33,7 +34,7 @@ public class ReportRepositoryCustomImp implements ReportRepositoryCustom {
 
         if (Objects.nonNull(userId) && userId != 0) {
             strQuery.append(" AND rp.user_id = :userId");
-            params.put("userId", "%" +userId+"%");
+            params.put("userId", userId);
         }
         String strSelectQuery = "SELECT * " + FROM_REPORT + strQuery;
         String strCountQuery = "SELECT COUNT(DISTINCT c.id)" + FROM_REPORT  + strQuery;
@@ -49,10 +50,31 @@ public class ReportRepositoryCustomImp implements ReportRepositoryCustom {
         if (Objects.nonNull(postId) && postId != 0) {
             strQuery.append(" AND rp.post_id = :postId");
             joinQuery.append(JOIN_TABLE_POST);
-            params.put("postId", "%" +postId+"%");
+            params.put("postId", postId);
         }
         String strSelectQuery = "SELECT * " + FROM_REPORT + joinQuery + strQuery;
         String strCountQuery = "SELECT COUNT(DISTINCT c.id)" + FROM_REPORT + joinQuery + strQuery;
         return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Report.class);
     }
+
+    @Override
+    public Page<Report> getAllReportByAdminByStatus(ReportStatus reportStatus, Long postId, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        strQuery.append(" WHERE 1=1");
+        Map<String, Object> params = new HashMap<>();
+
+        if(Objects.nonNull(reportStatus)){
+            strQuery.append(" AND rp.status = :status");
+            params.put("status", "%" + reportStatus.getValue() + "%");
+        }
+        if (Objects.nonNull(postId) && postId != 0) {
+            strQuery.append(" AND rp.post_id = :postId");
+            params.put("postId", "%" +postId+"%");
+        }
+
+        String strSelectQuery = "SELECT * " + FROM_REPORT + strQuery;
+        String strCountQuery = "SELECT COUNT(DISTINCT c.id)" + FROM_REPORT  + strQuery;
+        return BaseRepository.getPagedNativeQuery(em,strSelectQuery, strCountQuery, params, pageable, Report.class);
+    }
+
 }

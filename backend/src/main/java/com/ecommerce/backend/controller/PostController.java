@@ -25,7 +25,7 @@ public class PostController extends BaseController {
 
     @GetMapping
     @Operation(summary = "get paging of post")
-    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "get paging of post successful",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
@@ -41,7 +41,7 @@ public class PostController extends BaseController {
 
     @GetMapping("/filter")
     @Operation(summary = "filter sort for post")
-    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "get paging filter sort post successful",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
@@ -56,7 +56,7 @@ public class PostController extends BaseController {
             @RequestParam Long category ,
             @RequestParam Integer pageNo,
             @RequestParam Integer pageSize){
-        return createSuccessResponse("Create a new car",postService.getPagingPostFilter(category, sortBy,filterSortUser, pageNo, pageSize ));
+        return createSuccessResponse("get paging filter sort of post",postService.getPagingPostFilter(category, sortBy,filterSortUser, pageNo, pageSize ));
     }
     @PostMapping
     @Operation(summary = "create a new post")
@@ -78,7 +78,7 @@ public class PostController extends BaseController {
 
     @PutMapping("/{id}")
     @Operation(summary = "update post")
-    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "update a post successful",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
@@ -92,6 +92,75 @@ public class PostController extends BaseController {
             @RequestBody PostDTO postDTO
     ){
         postService.updatePost(id,postDTO);
-        return createSuccessResponse("Create a new post", HttpStatus.CREATED);
+        return createSuccessResponse("update post", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{id}")
+    @Operation(summary = "repost existing post")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "repost successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    public ResponseEntity<?> repostExistingPost(@PathVariable Long id) {
+        postService.repostExistingPost(id);
+        return createSuccessResponse("repost", HttpStatus.OK);
+    }
+
+    @PutMapping("/complete/{id}")
+    @Operation(summary = "complete a post")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "complete a post successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    private ResponseEntity<?> updateStatusToComplete(
+            @PathVariable Long id
+    ){
+        postService.lockPost(id);
+        return createSuccessResponse("complete post", HttpStatus.CREATED);
+    }
+
+
+    @PutMapping("/complete/cancel/{id}")
+    @Operation(summary = "cancel complete")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "cancel complete successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    private ResponseEntity<?> cancelComplete(
+            @PathVariable Long id
+    ){
+        postService.unlockPost(id);
+        return createSuccessResponse("cancel complete", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete post")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Delete post successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return createSuccessResponse("Delete post", HttpStatus.OK);
     }
 }

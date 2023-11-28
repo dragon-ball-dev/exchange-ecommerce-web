@@ -4,7 +4,7 @@ import com.ecommerce.backend.domain.dto.CategoryDTO;
 import org.springframework.data.domain.Page;
 
 public interface CategoryService {
-    Page<CategoryDTO> getPagingBrand(String name, Integer pageNo, Integer pageSize);
+    Page<CategoryDTO> getPagingBrand(Integer pageNo, Integer pageSize);
 
     void createNewCategory(CategoryDTO categoryDTO);
 

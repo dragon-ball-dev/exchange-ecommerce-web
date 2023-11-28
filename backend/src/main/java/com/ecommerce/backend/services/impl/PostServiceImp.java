@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +67,7 @@ public class PostServiceImp extends BaseService implements PostService {
     public Page<PostDTO> getPagingPostFilter(Long category, Integer sortBy, FilterSortUser filterSortUser, Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Post> postPage = postRepositoryCustom.getAllPostForParam(category,sortBy,filterSortUser, pageable,getUserId());
+        Page<Post> postPage = postRepositoryCustom.getAllPostForParam(category, sortBy, filterSortUser, pageable, getUserId());
         return mapper.convertToResponsePage(postPage, PostDTO.class, pageable);
     }
 
@@ -81,6 +82,11 @@ public class PostServiceImp extends BaseService implements PostService {
     public void updatePost(Long id, PostDTO postDTO) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post is not exist!"));
         post.setUpdatedAt(LocalDateTime.now());
+        post.setContent(postDTO.getContent());
+        post.setImage(postDTO.getImage());
+        post.setTitle(postDTO.getTitle());
+        post.setDate(postDTO.getDate());
+        post.setItemStatus(postDTO.getItemStatus());
         Category category = categoryRepository.findById(postDTO.getCategoryId()).orElseThrow(() -> new IllegalArgumentException("category is not exist!"));
         post.setCategoryId(category);
         postRepository.save(post);
@@ -89,20 +95,33 @@ public class PostServiceImp extends BaseService implements PostService {
     @Override
     public void lockPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post is not exist!"));
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setComplete(true);
-        postRepository.save(post);
+        User currentUser = userRepository.findById(getUserId())
+                .orElseThrow(() -> new IllegalStateException("Current user does not exist!"));
+        if (post.getUserId().equals(currentUser)) {
+            post.setUpdatedAt(LocalDateTime.now());
+            post.setComplete(true);
+            postRepository.save(post);
+        } else {
+            throw new IllegalStateException("User does not have permission to modify this post!");
+        }
     }
 
     @Override
     public void unlockPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post is not exist!"));
-        post.setUpdatedAt(LocalDateTime.now());
-        post.setComplete(false);
-        postRepository.save(post);
+        User currentUser = userRepository.findById(getUserId())
+                .orElseThrow(() -> new IllegalStateException("Current user does not exist!"));
+
+        if (post.getUserId().equals(currentUser)) {
+            post.setUpdatedAt(LocalDateTime.now());
+            post.setComplete(false);
+            postRepository.save(post);
+        } else {
+            throw new IllegalStateException("User does not have permission to modify this post!");
+        }
     }
 
-    public void repostExistingPost(Long id,PostDTO postDTO) {
+    public void repostExistingPost(Long id) {
         Post existingPost = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Post does not exist!"));
         Post repost = Post.builder()
@@ -112,22 +131,25 @@ public class PostServiceImp extends BaseService implements PostService {
                 .content(existingPost.getContent())
                 .date(existingPost.getDate())
                 .isComplete(false)
+                .categoryId(existingPost.getCategoryId())
+                .userId(existingPost.getUserId())
                 .build();
+        repost.setCreatedAt(LocalDateTime.now());
+        postRepository.save(repost);
+    }
 
-        // Kiểm tra và set lại category nếu có
-        if (postDTO.getCategoryId() != null) {
-            Category category = categoryRepository.findById(postDTO.getCategoryId())
-                    .orElseThrow(() -> new IllegalArgumentException("Category does not exist!"));
-            repost.setCategoryId(category);
-        }
+    @Override
+    public void deletePost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Post does not exist!"));
 
-        // Kiểm tra và set lại user nếu có
-        if (postDTO.getUserId() != null) {
-            User user = userRepository.findById(postDTO.getUserId())
-                    .orElseThrow(() -> new IllegalArgumentException("User does not exist!"));
-            repost.setUserId(user);
-            repost.setCreatedAt(LocalDateTime.now());
-            postRepository.save(repost);
+        User currentUser = userRepository.findById(getUserId())
+                .orElseThrow(() -> new IllegalStateException("Current user does not exist!"));
+
+        if (post.getUserId().equals(currentUser)) {
+            postRepository.deleteById(id);
+        } else {
+            throw new IllegalStateException("User does not have permission to delete this post!");
         }
     }
 
