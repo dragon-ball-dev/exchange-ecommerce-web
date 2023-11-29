@@ -1,16 +1,16 @@
 package com.ecommerce.backend.services.impl;
 
-import com.ecommerce.backend.domain.dto.PostDTO;
 import com.ecommerce.backend.domain.dto.ReportDTO;
+import com.ecommerce.backend.domain.enums.ReportStatus;
 import com.ecommerce.backend.domain.models.Post;
 import com.ecommerce.backend.domain.models.Report;
 import com.ecommerce.backend.domain.models.User;
-import com.ecommerce.backend.domain.param.PostParam;
 import com.ecommerce.backend.mapper.CommonMapper;
 import com.ecommerce.backend.repository.PostRepository;
 import com.ecommerce.backend.repository.ReportRepository;
 import com.ecommerce.backend.repository.ReportRepositoryCustom;
 import com.ecommerce.backend.repository.UserRepository;
+import com.ecommerce.backend.services.BaseService;
 import com.ecommerce.backend.services.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
-public class ReportServiceImp implements ReportService{
+public class ReportServiceImp extends BaseService implements ReportService{
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ReportRepository reportRepository;
@@ -32,6 +32,7 @@ public class ReportServiceImp implements ReportService{
     public void createNewReportByUser(ReportDTO reportDTO) {
         Report report = Report.builder()
                 .content(reportDTO.getContent())
+                .status(ReportStatus.UNREAD.getValue())
                 .build();
         report.setCreatedAt(LocalDateTime.now());
 
@@ -46,10 +47,10 @@ public class ReportServiceImp implements ReportService{
     }
 
     @Override
-    public Page<ReportDTO> getPagingReportByUser(Long userId,Integer pageNo, Integer pageSize) {
+    public Page<ReportDTO> getPagingReportByUser(Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Report> reportPage = reportRepositoryCustom.getAllReportByUser(userId,pageable);
+        Page<Report> reportPage = reportRepositoryCustom.getAllReportByUser(getUserId(),pageable);
         return mapper.convertToResponsePage(reportPage,ReportDTO.class,pageable);
     }
 
@@ -62,9 +63,13 @@ public class ReportServiceImp implements ReportService{
     }
 
     @Override
-    public Integer countRequestReportOfCustomer() {
-        return null;
+    public Page<ReportDTO> getPagingReportByAdminByStatus(ReportStatus reportStatus, Long postId, Integer pageNo, Integer pageSize) {
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Report> reportPage = reportRepositoryCustom.getAllReportByAdmin(postId,pageable);
+        return mapper.convertToResponsePage(reportPage,ReportDTO.class,pageable);
     }
+
 
     @Override
     public void handleReportByAdmin() {

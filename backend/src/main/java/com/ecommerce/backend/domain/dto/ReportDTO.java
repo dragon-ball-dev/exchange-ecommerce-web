@@ -16,4 +16,5 @@ public class ReportDTO {
     private LocalDateTime date;
     private Long userId;
     private Long postId;
+    private Integer status;
 }

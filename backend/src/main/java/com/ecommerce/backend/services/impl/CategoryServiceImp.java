@@ -26,19 +26,10 @@ public class CategoryServiceImp implements CategoryService {
 
 
     @Override
-    public Page<CategoryDTO> getPagingBrand(String name, Integer pageNo, Integer pageSize) {
+    public Page<CategoryDTO> getPagingBrand(Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
-        List<CategoryDTO> list = null;
-        if (Objects.nonNull(name)) {
-            list = mapper.convertToResponseList(categoryRepository.findAll()
-                            .stream()
-                            .filter(i -> name.equals(i.getName()))
-                            .collect(Collectors.toList())
-                    , CategoryDTO.class);
-        } else {
-            list = mapper.convertToResponseList(categoryRepository.findAll(), CategoryDTO.class);
-        }
+        List<CategoryDTO> list = mapper.convertToResponseList(categoryRepository.findAll(), CategoryDTO.class);
         return new PageImpl<>(list, pageable, list.size());
     }
 
@@ -51,10 +42,10 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public void updateCategory(Long id, CategoryDTO categoryDTO) {
-        if(Objects.nonNull(categoryRepository.findByName(categoryDTO.getName()))){
+        if (!Objects.nonNull(categoryRepository.findByName(categoryDTO.getName()))) {
             throw new IllegalArgumentException("Category name have existed!");
         }
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand is not exist"));
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Category is not exist"));
         category.setName(categoryDTO.getName());
         category.setUpdatedAt(LocalDateTime.now());
         categoryRepository.save(category);

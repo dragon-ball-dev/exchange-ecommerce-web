@@ -20,7 +20,6 @@ public class Category extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
     @Column(length = 60)
     private String name;
 }

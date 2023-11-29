@@ -13,5 +13,7 @@ public interface PostService {
     void lockPost(Long id);
     void unlockPost(Long id);
 
-    void repostExistingPost(Long id,PostDTO postDTO);
+    void repostExistingPost(Long id);
+
+    void deletePost(Long id);
 }
