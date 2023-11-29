@@ -5,6 +5,7 @@ import com.ecommerce.backend.controller.base.BaseController;
 import com.ecommerce.backend.controller.base.message.ExtendedMessage;
 import com.ecommerce.backend.domain.dto.PostDTO;
 import com.ecommerce.backend.domain.enums.FilterSortUser;
+import com.ecommerce.backend.services.PostLikeService;
 import com.ecommerce.backend.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @SecurityRequirement(name = "Bearer Authentication")
 public class PostController extends BaseController {
     private final PostService postService;
+    private final PostLikeService postLikeService;
 
     @GetMapping
     @Operation(summary = "get paging of post")
@@ -51,9 +53,9 @@ public class PostController extends BaseController {
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
     private ResponseEntity<?> getPostFilter(
-            @RequestParam FilterSortUser filterSortUser,
-            @RequestParam Integer sortBy,
-            @RequestParam Long category ,
+            @RequestParam(required = false) FilterSortUser filterSortUser,
+            @RequestParam(required = false) Integer sortBy,
+            @RequestParam(required = false)  Long category ,
             @RequestParam Integer pageNo,
             @RequestParam Integer pageSize){
         return createSuccessResponse("get paging filter sort of post",postService.getPagingPostFilter(category, sortBy,filterSortUser, pageNo, pageSize ));
@@ -109,6 +111,22 @@ public class PostController extends BaseController {
     public ResponseEntity<?> repostExistingPost(@PathVariable Long id) {
         postService.repostExistingPost(id);
         return createSuccessResponse("repost", HttpStatus.OK);
+    }
+
+    @PostMapping("/like/{postId}")
+    @Operation(summary = "like post")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "like successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    public ResponseEntity<?> handleLike(@PathVariable Long postId) {
+        postLikeService.handleLikePost(postId);
+        return createSuccessResponse("like post", HttpStatus.OK);
     }
 
     @PutMapping("/complete/{id}")
