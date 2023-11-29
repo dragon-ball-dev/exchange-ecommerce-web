@@ -47,9 +47,10 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   mail:
+
     host: smtp.gmail.com
-    username: khanhhn.hoang@gmail.com
-    password: rmjgjdgtziwhvmai
+    username: giangnam.17122002@gmail.com
+    password: eognzbmuuispjodk
     port: 587
     properties:
       mail:

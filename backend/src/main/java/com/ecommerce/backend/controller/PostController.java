@@ -95,7 +95,7 @@ public class PostController extends BaseController {
         return createSuccessResponse("update post", HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/repost/{id}")
     @Operation(summary = "repost existing post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "repost successful",
             content = {@Content(mediaType = "application/json",
