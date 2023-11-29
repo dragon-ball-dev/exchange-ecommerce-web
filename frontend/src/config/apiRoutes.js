@@ -8,7 +8,9 @@ const apiRoutes = {
     user: {
         me: '/user/me'
     },},
-    admin: {},
+    admin: {
+        category: '/category',
+    },
     web: {
         user: '/auth/upload-profile',
         post: '/post',

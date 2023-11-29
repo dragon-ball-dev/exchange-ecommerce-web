@@ -5,6 +5,7 @@ function CategoryHead() {
     return (
         <Head
             title={'Quản lý danh mục'}
+            route={config.routes.admin.category + '/create'}
         />
     );
 }

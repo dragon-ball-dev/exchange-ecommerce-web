@@ -22,6 +22,7 @@ import SettingPage from "../pages/Admin/Setting";
 import CategoryPage from "../pages/Admin/Category";
 import ItemConditionPage from "../pages/Admin/ItemCondition";
 import ProfileSettingPage from "../pages/Client/ProfileSetting";
+import CategoryFormPage from "../pages/Admin/Category/CategoryForm";
 
 
 const publicRoutes = [
@@ -124,70 +125,77 @@ const privateRoutes = [
         component: DashboardPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.post,
         component: PostPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.account,
         component: UserPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.report,
         component: ReportPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.trade,
         component: TradePage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.auto,
         component: AutoApprovePage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.info,
         component: InformationPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.setting,
         component: SettingPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.category,
         component: CategoryPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
+    },
+    {
+        path: config.routes.admin.category + '/create',
+        component: CategoryFormPage,
+        layout: AdminLayout,
+        roles: ['ADMIN'],
+        private: true,
     },
     {
         path: config.routes.admin.condition,
         component: ItemConditionPage,
         layout: AdminLayout,
         roles: ['ADMIN'],
-        private: false,
+        private: true,
     }
 ];
 
