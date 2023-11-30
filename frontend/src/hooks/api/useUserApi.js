@@ -9,6 +9,7 @@ import {
     usePutForm,
     usePutFormWithoutId,
     usePutWithoutId,
+    usePostForm,
 } from '../../utils/reactQuery';
 
 export const useGetMe = () => {
@@ -16,7 +17,7 @@ export const useGetMe = () => {
 };
 
 export const useUpdateUser = (updater) => {
-    return usePostQuery(apiRoutes.web.user, updater);
+    return usePostForm(apiRoutes.web.user, updater);
 }
 
 export const useChangePassword = (updater) => {

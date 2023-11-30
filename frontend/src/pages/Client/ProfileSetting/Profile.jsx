@@ -34,6 +34,7 @@ function Profile() {
             phone: data.phone,
             address: data.address,
         });
+        setImageUrl(data.imageUrl);
     }, [data, isLoading]);
 
     const onUpdateUser = async () => {

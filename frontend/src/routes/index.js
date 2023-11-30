@@ -23,7 +23,7 @@ import CategoryPage from "../pages/Admin/Category";
 import ItemConditionPage from "../pages/Admin/ItemCondition";
 import ProfileSettingPage from "../pages/Client/ProfileSetting";
 import CategoryFormPage from "../pages/Admin/Category/CategoryForm";
-
+import Forbidden from "../components/Forbidden";
 
 const publicRoutes = [
     {
@@ -48,7 +48,7 @@ const publicRoutes = [
         private: false,
     },
     {
-        path: config.routes.web.product_detail,
+        path: config.routes.web.product_detail + '/:id',
         component: ProductDetailPage,
         layout: ClientLayout,
         roles: ['USER'],
@@ -65,6 +65,13 @@ const publicRoutes = [
         path: config.routes.web.register,
         component: RegisterPage,
         layout: ClientLayout,
+        roles: ['USER'],
+        private: false,
+    },
+    {
+        path: config.routes.admin.forbidden,
+        component: Forbidden,
+        layout: null,
         roles: ['USER'],
         private: false,
     },
@@ -185,6 +192,13 @@ const privateRoutes = [
     },
     {
         path: config.routes.admin.category + '/create',
+        component: CategoryFormPage,
+        layout: AdminLayout,
+        roles: ['ADMIN'],
+        private: true,
+    },
+    {
+        path: config.routes.admin.category + '/update/:id',
         component: CategoryFormPage,
         layout: AdminLayout,
         roles: ['ADMIN'],

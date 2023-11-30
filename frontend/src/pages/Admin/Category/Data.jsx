@@ -2,7 +2,7 @@ import { faEdit, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Input, Table, Tag } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import ConfirmPrompt from '../../../layouts/Admin/components/ConfirmPrompt';
@@ -34,12 +34,12 @@ function transformData(dt, navigate, setIsDetailOpen, setIsDisableOpen) {
             name: item.name,
             action: (
                 <div className="action-btn flex gap-3">
-                    <Button
+                    {/* <Button
                         className="text-blue-500 border border-blue-500"
                         onClick={() => setIsDetailOpen({ id: item.id, isOpen: true })}
                     >
                         <FontAwesomeIcon icon={faSearch} />
-                    </Button>
+                    </Button> */}
                     <Button
                         className="text-green-500 border border-green-500"
                         onClick={() =>
@@ -50,7 +50,6 @@ function transformData(dt, navigate, setIsDetailOpen, setIsDisableOpen) {
                     </Button>
                     <Button
                         className={'text-red-500 border border-red-500'}
-                        disabled={!item.status}
                         onClick={() => setIsDisableOpen({ id: item.id, isOpen: true })}
                     >
                         <FontAwesomeIcon icon={faTrash} />
@@ -75,7 +74,7 @@ function Data({ setProductCategoryIds, params, setParams }) {
     const [tdata, setTData] = useState([]);
     const [tableParams, setTableParams] = useState({
         pagination: {
-            current: params.pageIndex,
+            current: params.pageNo,
             pageSize: params.pageSize,
             total: data?.data?.totalItems,
         },
@@ -83,7 +82,7 @@ function Data({ setProductCategoryIds, params, setParams }) {
 
     useEffect(() => {
         if (isLoading || !data) return;
-        let dt = transformData(data?.data?.items, navigate, setIsDetailOpen, setIsDisableOpen);
+        let dt = transformData(data?.data?.content, navigate, setIsDetailOpen, setIsDisableOpen);
         setTData(dt);
         setTableParams({
             ...tableParams,
@@ -171,9 +170,9 @@ function Data({ setProductCategoryIds, params, setParams }) {
                 onChange={handleTableChange}
             />
 
-            {isDetailOpen.id !== 0 && (
+            {/* {isDetailOpen.id !== 0 && (
                 <CategoryDetail isDetailOpen={isDetailOpen} setIsDetailOpen={setIsDetailOpen} />
-            )}
+            )} */}
 
             {isDisableOpen.id !== 0 && (
                 <ConfirmPrompt

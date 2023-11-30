@@ -11,7 +11,7 @@ function CategoryPage(){
     });
     return <div className="category-container">
         <CategoryHead />
-        <Data />
+        <Data params={params} setParams={setParams} setProductCategoryIds={productCategoryIds}/>
     </div>
 }
 

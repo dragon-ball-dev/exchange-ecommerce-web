@@ -11,6 +11,7 @@ const routes = {
         auto: '/admin/auto',
         category: '/admin/category',
         condition: '/admin/condition',
+        forbidden: '/forbidden',
     },
     web: {
         home: '/',

@@ -16,7 +16,6 @@ function PrivateRoute({ children, roles }) {
         return <Navigate to={config.routes.web.login} replace />;
     }
     if (roles.includes('ADMIN') && !roles.includes('USER')) {
-        console.log(data?.roles);
         const res = data?.roles?.some((role) => role?.name?.includes('ADMIN'));
         if (!res) {
             return <Navigate to={config.routes.admin.forbidden} replace />;

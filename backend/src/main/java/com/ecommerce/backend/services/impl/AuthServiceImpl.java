@@ -18,6 +18,7 @@ import com.ecommerce.backend.services.AuthService;
 import com.ecommerce.backend.services.BaseService;
 import com.ecommerce.backend.services.FileStorageService;
 import org.apache.activemq.kaha.impl.index.BadMagicException;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -209,15 +211,18 @@ public class AuthServiceImpl extends BaseService implements AuthService {
     }
 
     @Override
-    public MessageResponse uploadProfile(MultipartFile file, String zalo, String facebook, String address) {
+    public MessageResponse uploadProfile(MultipartFile file, String zalo, String facebook, String phone, String address) throws IOException {
         User user = userRepository.findById(getUserId()).orElseThrow(() -> new BadRequestException("Tài khoảng không tồn tại"));
         user.setZaloUrl(zalo);
         user.setFacebookUrl(facebook);
         user.setAddress(address);
-        if (Objects.nonNull(file)) {
-            String image = fileStorageService.storeFile(file).replace("photographer/files/", "");
-            user.setImageUrl("http://localhost:8080/image/" + image);
-        }
+        user.setPhone(phone);
+        String encodedString = Base64.getEncoder().encodeToString(file.getBytes());
+        user.setImageUrl("data:image/png;base64, " + encodedString);
+//        if (Objects.nonNull(file)) {
+//            String image = fileStorageService.storeFile(file).replace("photographer/files/", "");
+//            user.setImageUrl("http://localhost:8080/image/" + image);
+//        }
         userRepository.save(user);
         return MessageResponse.builder().message("Thay thông tin cá nhân thành công.").build();
     }

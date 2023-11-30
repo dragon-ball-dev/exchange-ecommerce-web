@@ -13,7 +13,6 @@ const ProfilePage = () => {
                     <img
                         loading="lazy"
                         src={
-                            data?.imageUrl ||
                             'https://cdn.builder.io/api/v1/image/assets/TEMP/839fc428-8dce-45d4-868e-215646302f97?apiKey=b570640ca9b549a79647f94d6104bae5&'
                         }
                         className="aspect-[3.42] object-contain object-center w-full justify-center items-center overflow-hidden max-md:max-w-full"
@@ -23,9 +22,13 @@ const ProfilePage = () => {
                             <div className="gap-5 py-10 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
                                 <div className="flex flex-col items-stretch w-1/5 max-md:w-full max-md:ml-0 rounded-full">
                                     <div className="items-stretch flex flex-col justify-center w-[150px] h-[150px] mx-auto pb-1.5 px-1.5 rounded-full border-[6px] border-solid border-white max-md:mt-8">
-                                        <div className="text-gray-500 text-center flex justify-center items-center text-7xl w-[150px] h-[150px]  bg-indigo-50 rounded-full ">
-                                            <span>M</span>
-                                        </div>
+                                        {!data?.imageUrl ? (
+                                            <div className="text-gray-500 text-center flex justify-center items-center text-7xl w-[150px] h-[150px]  bg-indigo-50 rounded-full ">
+                                                <span>M</span>
+                                            </div>
+                                        ) : (
+                                            <img src={data?.imageUrl} />
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-stretch w-4/5 ml-5 max-md:w-full max-md:ml-0">
