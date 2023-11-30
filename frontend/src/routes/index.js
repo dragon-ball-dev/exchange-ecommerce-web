@@ -24,6 +24,8 @@ import ItemConditionPage from "../pages/Admin/ItemCondition";
 import ProfileSettingPage from "../pages/Client/ProfileSetting";
 import CategoryFormPage from "../pages/Admin/Category/CategoryForm";
 import Forbidden from "../components/Forbidden";
+import ProfilePageLayout from "../pages/Client/Profile";
+import UpdatePostFormPage from "../pages/Client/Profile/UpdatePostForm";
 
 const publicRoutes = [
     {
@@ -83,7 +85,7 @@ const privateRoutes = [
         component: ChatPage,
         layout: ClientLayout,
         roles: ['USER'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.web.settings,
@@ -104,28 +106,35 @@ const privateRoutes = [
         component: ProfilePage,
         layout: ClientLayout,
         roles: ['USER'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.web.profile + "/:tag",
         component: ProfilePage,
         layout: ClientLayout,
         roles: ['USER'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.web.create_post,
         component: CreatePostPage,
         layout: ClientLayout,
         roles: ['USER'],
-        private: false,
+        private: true,
+    },
+    {
+        path: config.routes.web.post + '/:id',
+        component: UpdatePostFormPage,
+        layout: ClientLayout,
+        roles: ['USER'],
+        private: true,
     },
     {
         path: config.routes.web.create_iso,
         component: CreateISOPage,
         layout: ClientLayout,
         roles: ['USER'],
-        private: false,
+        private: true,
     },
     {
         path: config.routes.admin.dashboard,
