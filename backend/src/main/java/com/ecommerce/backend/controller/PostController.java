@@ -61,6 +61,41 @@ public class PostController extends BaseController {
             @RequestParam Integer pageSize){
         return createSuccessResponse("get paging filter sort of post",postService.getPagingPostFilter(category, sortBy,filterSortUser, pageNo, pageSize ));
     }
+
+    @GetMapping("/user")
+    @Operation(summary = "get paging post of user")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "get paging post of user successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    private ResponseEntity<?> getPostByUser(
+            @RequestParam Long userId,
+            @RequestParam Integer pageNo,
+            @RequestParam Integer pageSize){
+        return createSuccessResponse("get paging post of user ",postService.getPostByUser(userId, pageNo, pageSize ));
+    }
+    @GetMapping("/user/like")
+    @Operation(summary = "get paging post like of user ")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "get paging post like of user successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    private ResponseEntity<?> getPostUserLike(
+            @RequestParam Long userId,
+            @RequestParam Integer pageNo,
+            @RequestParam Integer pageSize){
+        return createSuccessResponse("get paging post like of user  ",postService.getLikedPostsByUser(userId, pageNo, pageSize ));
+    }
     @PostMapping
     @Operation(summary = "create a new post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",

@@ -33,7 +33,8 @@ public class FollowServiceImpl extends BaseService implements FollowService {
         Optional<Follow> followOptional = followRepository.findByFollowerAndFollowing(follower, following);
 
         if (followOptional.isPresent()) {
-            throw new IllegalArgumentException("User đã được theo dõi.");
+            followRepository.delete(followOptional.get());
+            return MessageResponse.builder().message("Đã hủy theo dõi").build();
         }
         Follow follow = new Follow();
         follow.setFollower(follower);

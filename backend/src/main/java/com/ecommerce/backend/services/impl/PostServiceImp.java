@@ -166,5 +166,23 @@ public class PostServiceImp extends BaseService implements PostService {
         }
     }
 
+    @Override
+    public Page<PostDTO> getPostByUser(Long userId, Integer pageNo, Integer pageSize) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User does not exist!"));
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Post> postPage = postRepository.findByUserId(user,pageable);
+        return mapper.convertToResponsePage(postPage, PostDTO.class, pageable);
+    }
 
+    @Override
+    public Page<PostDTO> getLikedPostsByUser(Long userId, Integer pageNo, Integer pageSize) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User does not exist!"));
+        int page = pageNo == 0 ? pageNo : pageNo - 1;
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Post> postPage = postRepositoryCustom.findByLikedPostsId(user,pageable);
+        return mapper.convertToResponsePage(postPage, PostDTO.class, pageable);
+    }
 }

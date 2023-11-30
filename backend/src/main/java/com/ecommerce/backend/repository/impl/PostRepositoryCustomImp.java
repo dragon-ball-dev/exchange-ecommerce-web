@@ -3,6 +3,7 @@ package com.ecommerce.backend.repository.impl;
 import com.ecommerce.backend.domain.dto.PostDTO;
 import com.ecommerce.backend.domain.enums.FilterSortUser;
 import com.ecommerce.backend.domain.models.Post;
+import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.repository.BaseRepository;
 import com.ecommerce.backend.repository.PostRepositoryCustom;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,6 @@ public class PostRepositoryCustomImp implements PostRepositoryCustom {
             strQuery.append(" AND u.id = :userId");
             params.put("userId", userId);
         }
-        joinQuery.append(JOIN_POST_LIKE);
         String selectQuery = "SELECT * " + FROM_POST + joinQuery + strQuery ;
         String countQuery = "SELECT COUNT(DISTINCT p.id) "+ FROM_POST + joinQuery + strQuery;
 
@@ -56,6 +56,23 @@ public class PostRepositoryCustomImp implements PostRepositoryCustom {
 
     }
 
+    @Override
+    public Page<Post> findByLikedPostsId(User userId, Pageable pageable) {
+        StringBuilder strQuery = new StringBuilder();
+        StringBuilder joinQuery = new StringBuilder();
+        strQuery.append("WHERE 1=1 ");
+
+        Map<String, Object> params = new HashMap<>();
+        if (Objects.nonNull(userId)) {
+            joinQuery.append(JOIN_POST_LIKE);
+            strQuery.append(" AND pl.user_id = :userId");
+            params.put("userId", userId.getId());
+        }
+
+        String selectQuery = "SELECT * " + FROM_POST + joinQuery + strQuery ;
+        String countQuery = "SELECT COUNT(DISTINCT p.id) "+ FROM_POST + joinQuery + strQuery;
 
 
+        return BaseRepository.getPagedNativeQuery(em, selectQuery, countQuery, params, pageable, Post.class);
+    }
 }

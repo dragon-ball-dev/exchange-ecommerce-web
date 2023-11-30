@@ -24,8 +24,8 @@ public class CategoryController extends BaseController {
     private final CategoryService categoryService;
 
     @PostMapping
-    @Operation(summary = "create a new post")
-    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
+    @Operation(summary = "create a new category")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new category successful",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
