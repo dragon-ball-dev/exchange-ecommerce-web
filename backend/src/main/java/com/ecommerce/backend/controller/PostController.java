@@ -25,6 +25,7 @@ public class PostController extends BaseController {
     private final PostService postService;
     private final PostLikeService postLikeService;
 
+
     @GetMapping
     @Operation(summary = "get paging of post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "get paging of post successful",
@@ -126,6 +127,7 @@ public class PostController extends BaseController {
                     schema = @Schema(implementation = ExtendedMessage.class))})
     public ResponseEntity<?> handleLike(@PathVariable Long postId) {
         postLikeService.handleLikePost(postId);
+        postService.updateLike(postId);
         return createSuccessResponse("like post", HttpStatus.OK);
     }
 

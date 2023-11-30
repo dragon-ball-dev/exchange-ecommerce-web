@@ -6,10 +6,7 @@ import com.ecommerce.backend.domain.models.Category;
 import com.ecommerce.backend.domain.models.Post;
 import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.mapper.CommonMapper;
-import com.ecommerce.backend.repository.CategoryRepository;
-import com.ecommerce.backend.repository.PostRepository;
-import com.ecommerce.backend.repository.PostRepositoryCustom;
-import com.ecommerce.backend.repository.UserRepository;
+import com.ecommerce.backend.repository.*;
 import com.ecommerce.backend.services.BaseService;
 import com.ecommerce.backend.services.PostService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +26,7 @@ public class PostServiceImp extends BaseService implements PostService {
     private final PostRepository postRepository;
     private final PostRepositoryCustom postRepositoryCustom;
     private final CommonMapper mapper;
+    private final UserLikePostRepository userLikePostRepository;
 
     @Override
     public void createNewPostByUser(PostDTO postDTO) {
@@ -39,6 +37,7 @@ public class PostServiceImp extends BaseService implements PostService {
                 .content(postDTO.getContent())
                 .date(postDTO.getDate())
                 .isComplete(false)
+                .likeCount(0L)
                 .build();
         if (postDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(postDTO.getCategoryId())
@@ -131,6 +130,7 @@ public class PostServiceImp extends BaseService implements PostService {
                 .content(existingPost.getContent())
                 .date(existingPost.getDate())
                 .isComplete(false)
+                .likeCount(0L)
                 .categoryId(existingPost.getCategoryId())
                 .userId(existingPost.getUserId())
                 .build();
@@ -152,5 +152,19 @@ public class PostServiceImp extends BaseService implements PostService {
             throw new IllegalStateException("User does not have permission to delete this post!");
         }
     }
+
+    @Override
+    public void updateLike(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Post does not exist!"));
+
+        Long likeCount = userLikePostRepository.countUsersLike(id);
+
+        if (likeCount != null) {
+            post.setLikeCount(likeCount);
+            postRepository.save(post);
+        }
+    }
+
 
 }

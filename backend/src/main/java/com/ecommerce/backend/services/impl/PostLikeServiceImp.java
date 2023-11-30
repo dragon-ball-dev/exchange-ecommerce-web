@@ -3,7 +3,6 @@ package com.ecommerce.backend.services.impl;
 import com.ecommerce.backend.domain.models.Post;
 import com.ecommerce.backend.domain.models.User;
 import com.ecommerce.backend.repository.PostRepository;
-import com.ecommerce.backend.repository.UserLikePostRepository;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.services.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import com.ecommerce.backend.services.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,7 +22,6 @@ public class  PostLikeServiceImp extends BaseService implements PostLikeService 
     @Autowired
     private PostRepository postRepository;
 
-    private UserLikePostRepository userLikePostRepository;
 
     public void handleLikePost(Long postId) {
         if (Objects.nonNull(getUserId()) && Objects.nonNull(postId)) {
@@ -39,15 +36,8 @@ public class  PostLikeServiceImp extends BaseService implements PostLikeService 
             } else {
                 likedPosts.add(user);
             }
-
             postRepository.save(post);
         }
     }
-
-    @Override
-    public Integer countLikesForPost(Long postId) {
-        return userLikePostRepository.countUsersLike(postId);
-    }
-
 
 }

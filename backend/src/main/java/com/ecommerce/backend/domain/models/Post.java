@@ -37,7 +37,7 @@ public class Post extends BaseEntity {
     private boolean isComplete;
 
     @Column(name = "like_count")
-    private boolean likeCount;
+    private Long likeCount;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
