@@ -1,12 +1,13 @@
 import { faEdit, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Input, Table, Tag } from 'antd';
-import { useState } from 'react';
+import { Button, Input, Table, Tag, notification } from 'antd';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import ConfirmPrompt from '../../../layouts/Admin/components/ConfirmPrompt';
 import PostDetail from './PostDetail';
+import { useDeletePost, useGetListPost } from '../../../hooks/api/usePostApi';
 
 const baseColumns = [
     {
@@ -17,10 +18,7 @@ const baseColumns = [
     },
     {
         title: 'Ngày tạo',
-        dataIndex: 'createdAt',
-        sorter: true,
-        ellipsis: true,
-        width: 200,
+        dataIndex: 'date',
     },
     {
         title: 'Ảnh',
@@ -29,158 +27,140 @@ const baseColumns = [
     {
         title: 'Tiêu đề',
         dataIndex: 'title',
-        sorter: true,
     },
     {
-        title: 'Phân loại',
-        dataIndex: 'category',
-        sorter: true,
+        title: 'Nội dung',
+        dataIndex: 'content',
     },
     {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        sorter: true,
+        title: 'Category Id',
+        dataIndex: 'categoryId',
     },
     {
-        title: 'Hoàn thành',
-        dataIndex: 'isComplete',
-        sorter: true,
+        title: 'User Id',
+        dataIndex: 'userId',
+    },
+    {
+        title: 'Tổng lượt thích',
+        dataIndex: 'likeCount',
     },
     {
         title: 'Thao tác',
         dataIndex: 'action',
     },
 ];
-function Data() {
+
+function transformData(dt, navigate, setIsDetailOpen, setIsDisableOpen) {
+    return dt?.map((item) => {
+        return {
+            key: item.id,
+            id: item.id,
+            date: new Date(item.date)?.toLocaleString(),
+            title: item.title,
+            content: item.content,
+            categoryId: item.categoryId,
+            userId: item.userId,
+            likeCount: item.likeCount,
+            image: (
+                <img
+                    className="w-20 h-20 rounded-xl"
+                    src={item.image}
+                />
+            ),
+            action: (
+                <div className="action-btn flex gap-3">
+                    <Button
+                        className="text-green-500 border border-green-500"
+                        onClick={() =>
+                            navigate(`${config.routes.admin.Post}/${item.id}`)
+                        }
+                    >
+                        <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                    <Button
+                        className={'text-red-500 border border-red-500'}
+                        onClick={() => setIsDisableOpen({ id: item.id, isOpen: true })}
+                    >
+                        <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                </div>
+            ),
+        };
+    });
+}
+
+function Data({ setProductPostIds, params, setParams }) {
     const [isDetailOpen, setIsDetailOpen] = useState({
         id: 0,
-        isOpen: false
+        isOpen: false,
     });
     const [isDisableOpen, setIsDisableOpen] = useState({
         id: 0,
-        isOpen: false
+        isOpen: false,
     });
     const navigate = useNavigate();
-    const [rawData, setRawData] = useState([
-        {
-            key: '1',
-            id: '1',
-            createdAt: new Date().toLocaleString(),
-            image: (
-                <img
-                    className="w-20 h-20 rounded-xl"
-                    src="https://dummyimage.com/138x100.png/dddddd/000000"
-                />
-            ),
-            title: 'Bán nồi cơm điện tử',
-            category: 'Đồ gia dụng',
-            status: (
-                <Tag className="w-fit uppercase" color="red">
-                    Chưa duyệt
-                </Tag>
-            ),
-            isComplete: (
-                <Tag className="w-fit uppercase" color="red">
-                    Chưa hoàn thành
-                </Tag>
-            ),
-            action: (
-                <div className="flex gap-3">
-                    <Button
-                        className="text-blue-500 border border-blue-500"
-                        onClick={() => setIsDetailOpen({
-                            id: 1,
-                            isOpen: true
-                        })}
-                    >
-                        <FontAwesomeIcon icon={faSearch} />
-                    </Button>
-                    {/* <Button
-                        className="text-green-500 border border-green-500"
-                        // onClick={() => navigate(`${config.routes.admin.post}/1`)}
-                    >
-                        <FontAwesomeIcon icon={faEdit} />
-                    </Button> */}
-                    <Button
-                        className="text-red-500 border border-red-500"
-                        onClick={() => setIsDisableOpen({
-                            id: 1,
-                            isOpen: true
-                        })}
-                    >
-                        <FontAwesomeIcon icon={faEyeSlash} />
-                    </Button>
-                </div>
-            ),
+    const { data, isLoading, refetch } = useGetListPost(params);
+    const [tdata, setTData] = useState([]);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: params.pageNo,
+            pageSize: params.pageSize,
+            total: data?.totalElements,
         },
-        {
-            key: '2',
-            id: '2',
-            createdAt: new Date().toLocaleString(),
-            image: (
-                <img
-                    className="w-20 h-20 rounded-xl"
-                    src="https://dummyimage.com/138x100.png/dddddd/000000"
-                />
-            ),
-            title: 'Bán nồi cơm điện tử',
-            category: 'Đồ gia dụng',
-            status: (
-                <Tag className="w-fit uppercase" color="green">
-                    Đã duyệt
-                </Tag>
-            ),
-            isComplete: (
-                <Tag className="w-fit uppercase" color="green">
-                    Hoàn thành
-                </Tag>
-            ),
-            action: (
-                <div className="flex gap-3">
-                    <Button
-                        className="text-blue-500 border border-blue-500"
-                        onClick={() => setIsDetailOpen({
-                            id: 1,
-                            isOpen: true
-                        })}
-                    >
-                        <FontAwesomeIcon icon={faSearch} />
-                    </Button>
-                    {/* <Button
-                        className="text-green-500 border border-green-500"
-                        // onClick={() => navigate(`${config.routes.admin.payment_method_update}/1`)}
-                    >
-                        <FontAwesomeIcon icon={faEdit} />
-                    </Button> */}
-                    <Button
-                        className="text-red-500 border border-red-500"
-                        onClick={() => setIsDisableOpen({
-                            id: 1,
-                            isOpen: true
-                        })}
-                    >
-                        <FontAwesomeIcon icon={faEyeSlash} />
-                    </Button>
-                </div>
-            ),
-        },
-    ]);
-    const [data, setData] = useState(rawData);
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: (record) => ({
-            name: record.name,
-        }),
-    };
+    });
+
+    useEffect(() => {
+        if (isLoading || !data) return;
+        let dt = transformData(data?.content, navigate, setIsDetailOpen, setIsDisableOpen);
+        setTData(dt);
+        setTableParams({
+            ...tableParams,
+            pagination: {
+                ...tableParams.pagination,
+                total: data?.totalElements,
+            },
+        });
+    }, [isLoading, data]);
+
     const onSearch = (value) => {
         const dt = rawData;
         const filterTable = dt.filter((o) =>
             Object.keys(o).some((k) => String(o[k]).toLowerCase().includes(value.toLowerCase())),
         );
 
-        setData(filterTable);
+        setTData(filterTable);
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            ...tableParams,
+            pagination,
+            ...sorter,
+        });
+        setParams({
+            ...params,
+            pageNo: pagination.current,
+            pageSize: pagination.pageSize
+        });
+    };
+
+    const mutationDelete = useDeletePost({
+        success: () => {
+            setIsDisableOpen({ ...isDisableOpen, isOpen: false });
+            notification.success({
+                message: 'Thành công'
+            });
+            refetch();
+        },
+        error: (err) => {
+            notification.error({
+                message: 'Thất bại'
+            });
+        }
+    });
+
+    const onDelete = async (id) => {
+        await mutationDelete.mutateAsync(id);
     };
 
     return (
@@ -194,24 +174,23 @@ function Data() {
                     onSearch={onSearch}
                 />
             </div>
+
             <Table
-                rowSelection={{
-                    type: 'checkbox',
-                    ...rowSelection,
-                }}
+                loading={isLoading}
                 columns={baseColumns}
-                dataSource={data}
-                pagination={{
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                }}
+                dataSource={tdata}
+                pagination={{ ...tableParams.pagination, showSizeChanger: true }}
+                onChange={handleTableChange}
             />
-            <PostDetail isDetailOpen={isDetailOpen} setIsDetailOpen={setIsDetailOpen} />
-            <ConfirmPrompt
-                content="Bạn có muốn ẩn bài viết này ?"
-                isDisableOpen={isDisableOpen}
-                setIsDisableOpen={setIsDisableOpen}
-            />
+
+            {isDisableOpen.id !== 0 && (
+                <ConfirmPrompt
+                    content="Bạn có muốn xoá bài này ?"
+                    isDisableOpen={isDisableOpen}
+                    setIsDisableOpen={setIsDisableOpen}
+                    handleConfirm={onDelete}
+                />
+            )}
         </div>
     );
 }

@@ -26,3 +26,7 @@ export const useGetPost = (id) => {
 export const useLikePost = (id, updater) => {
     return usePost(`${apiRoutes.web.post}/like/${id}`, updater);
 }
+
+export const useDeletePost = (updater) => {
+    return useDelete(apiRoutes.web.post, updater);
+}
