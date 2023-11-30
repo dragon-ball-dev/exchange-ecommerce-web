@@ -78,7 +78,19 @@ public class PostController extends BaseController {
         postService.createNewPostByUser(postDTO);
        return createSuccessResponse("Create a new post", HttpStatus.CREATED);
     }
-
+    @GetMapping("/{id}")
+    @Operation(summary = "get post")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "get a post successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    private ResponseEntity<?> getPost(
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(postService.getPostById(id));
+    }
     @PutMapping("/{id}")
     @Operation(summary = "update post")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "update a post successful",

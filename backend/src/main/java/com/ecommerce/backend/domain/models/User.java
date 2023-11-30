@@ -41,6 +41,7 @@ public class User extends DateAudit {
 	@Column(nullable = false)
 	private String email;
 
+	@Column(columnDefinition = "LONGTEXT")
 	private String imageUrl;
 
 	@Column(nullable = false)
