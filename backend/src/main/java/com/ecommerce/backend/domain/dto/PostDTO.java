@@ -21,4 +21,5 @@ public class PostDTO {
     private Boolean isCompleted;
     private Long userId;
     private Long categoryId;
+    private Long likeCount;
 }

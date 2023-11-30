@@ -36,6 +36,9 @@ public class Post extends BaseEntity {
     @Column(name = "is_complete")
     private boolean isComplete;
 
+    @Column(name = "like_count")
+    private Long likeCount;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
@@ -47,9 +50,8 @@ public class Post extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_post_like",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> likedPosts = new HashSet<>();
 
 
