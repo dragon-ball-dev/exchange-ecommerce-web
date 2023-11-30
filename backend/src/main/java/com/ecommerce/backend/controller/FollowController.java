@@ -25,7 +25,7 @@ public class FollowController extends BaseController {
 
     @PostMapping
     @Operation(summary = "follow user")
-    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "add follow or unfollow successful",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
@@ -43,7 +43,7 @@ public class FollowController extends BaseController {
 
     @GetMapping
     @Operation(summary = "get paging of follow user")
-    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Create a new post successful",
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "get paging of follow user successful",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
