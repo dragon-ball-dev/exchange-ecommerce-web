@@ -24,7 +24,7 @@ const ProductImages = ({ data }) => {
             <img
                 loading="lazy"
                 srcSet={data?.image}
-                className="aspect-[0.89] w-2/3 object-contain object-center  overflow-hidden self-stretch rounded-3xl"
+                className="aspect-[0.89] w-2/3 border border-solid border-black object-contain object-center  overflow-hidden self-stretch rounded-3xl"
                 alt="Main Image"
             />
         </div>

@@ -74,6 +74,8 @@ public class CategoryController extends BaseController {
         return createSuccessResponse("Update category", HttpStatus.OK);
     }
 
+
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category ")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Delete category successful",

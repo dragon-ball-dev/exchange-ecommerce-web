@@ -1,22 +1,23 @@
-const ProductInfo = ({data}) => {
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
+import config from '../../../config';
+
+const ProductInfo = ({ data }) => {
     return (
         <div className="flex flex-col mt-4 px-5 max-md:max-w-full max-md:mt-10">
             <div className="text-gray-800 text-[4rem] font-bold -mr-5 max-md:max-w-full">
                 {data?.title}
             </div>
+            <Link to={config.routes.web.chat} className="w-1/2 flex justify-center items-center text-white rounded-[3rem] bg-yellow-400 h-20 text-[2rem]">Start chat</Link>
             <div className="items-stretch self-stretch flex flex-col -mr-5 mt-12 max-md:max-w-full max-md:mt-10">
                 <div className="text-gray-800 text-2xl font-bold leading-6 whitespace-nowrap max-md:max-w-full">
                     Description
                 </div>
-                <div className="text-gray-800 text-2xl mt-2 max-md:max-w-full">
-                    {data?.content}
-                </div>
+                <div className="text-gray-800 text-2xl mt-2 max-md:max-w-full">{data?.content}</div>
             </div>
             <div className="items-center flex w-[184px] max-w-full gap-[3rem] mt-8">
                 <div className="text-gray-800 text-2xl font-bold leading-6 my-auto">Category</div>
-                <div className="text-gray-800 text-2xl leading-7 ">
-                    Computers
-                </div>
+                <div className="text-gray-800 text-2xl leading-7 ">{data?.categoryId}</div>
             </div>
             {/* <div className="self-stretch flex  gap-[3rem] -mr-5 mt-9 pr-16 max-md:max-w-full max-md:flex-wrap max-md:pr-5">
                 <div className="text-gray-800 text-2xl font-bold leading-6 mt-2">Condition</div>
