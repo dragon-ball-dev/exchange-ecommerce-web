@@ -7,3 +7,7 @@ export const useLogin = (updater) => {
 export const useRegister = (updater) => {
     return usePost(apiRoutes.common.auth.register, updater);
 }
+
+export const useConfirmEmail = (updater) => {
+    return usePost(apiRoutes.common.auth.confirmed, updater);
+}

@@ -30,5 +30,5 @@ public interface AuthService {
 
     MessageResponse lockAccount(Long id);
 
-    MessageResponse uploadProfile(MultipartFile file, String zalo, String facebook, String address);
+    MessageResponse uploadProfile(MultipartFile file, String zalo, String facebook, String phone, String address) throws IOException;
 }

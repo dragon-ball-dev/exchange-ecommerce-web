@@ -25,6 +25,7 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String image;
 
     @Column(name = "date")

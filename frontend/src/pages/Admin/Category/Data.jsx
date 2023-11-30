@@ -2,11 +2,12 @@ import { faEdit, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Input, Table, Tag } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import ConfirmPrompt from '../../../layouts/Admin/components/ConfirmPrompt';
 import CategoryDetail from './CategoryDetail';
+import { useDeleteCategory, useGetListCategory } from '../../../hooks/api/useCategoryApi';
 
 const baseColumns = [
     {
@@ -16,93 +17,133 @@ const baseColumns = [
         width: 50,
     },
     {
-        title: 'Ngày tạo',
-        dataIndex: 'createdAt',
-        sorter: true,
-        ellipsis: true,
-        width: 200,
-    },
-    {
         title: 'Tên danh mục',
         dataIndex: 'name',
-    },
-    {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        sorter: true,
     },
     {
         title: 'Thao tác',
         dataIndex: 'action',
     },
 ];
-function Data() {
-    const [isDetailOpen, setIsDetailOpen] = useState({
-        id: 0,
-        isOpen: false
-    });
-    const [isDisableOpen, setIsDisableOpen] = useState({
-        id: 0,
-        isOpen: false
-    });
-    const navigate = useNavigate();
-    const [rawData, setRawData] = useState([
-        {
-            key: '1',
-            id: '1',
-            createdAt: new Date().toLocaleString(),
-            name: 'Đồ gia dụng',
-            status: (
-                <Tag className="w-fit uppercase" color="red">
-                    Chưa duyệt
-                </Tag>
-            ),
+
+function transformData(dt, navigate, setIsDetailOpen, setIsDisableOpen) {
+    return dt?.map((item) => {
+        return {
+            key: item.id,
+            id: item.id,
+            name: item.name,
             action: (
-                <div className="flex gap-3">
-                    <Button
+                <div className="action-btn flex gap-3">
+                    {/* <Button
                         className="text-blue-500 border border-blue-500"
-                        onClick={() => setIsDetailOpen({
-                            id: 1,
-                            isOpen: true
-                        })}
+                        onClick={() => setIsDetailOpen({ id: item.id, isOpen: true })}
                     >
                         <FontAwesomeIcon icon={faSearch} />
-                    </Button>
+                    </Button> */}
                     <Button
                         className="text-green-500 border border-green-500"
-                        // onClick={() => navigate(`${config.routes.admin.Category}/1`)}
+                        onClick={() =>
+                            navigate(`${config.routes.admin.category}/${item.id}`)
+                        }
                     >
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                     <Button
-                        className="text-red-500 border border-red-500"
-                        onClick={() => setIsDisableOpen({
-                            id: 1,
-                            isOpen: true
-                        })}
+                        className={'text-red-500 border border-red-500'}
+                        onClick={() => setIsDisableOpen({ id: item.id, isOpen: true })}
                     >
-                        <FontAwesomeIcon icon={faEyeSlash} />
+                        <FontAwesomeIcon icon={faTrash} />
                     </Button>
                 </div>
             ),
-        }
-    ]);
-    const [data, setData] = useState(rawData);
+        };
+    });
+}
+
+function Data({ setProductCategoryIds, params, setParams }) {
+    const [isDetailOpen, setIsDetailOpen] = useState({
+        id: 0,
+        isOpen: false,
+    });
+    const [isDisableOpen, setIsDisableOpen] = useState({
+        id: 0,
+        isOpen: false,
+    });
+    const navigate = useNavigate();
+    const { data, isLoading } = useGetListCategory(params);
+    const [tdata, setTData] = useState([]);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: params.pageNo,
+            pageSize: params.pageSize,
+            total: data?.data?.totalItems,
+        },
+    });
+
+    useEffect(() => {
+        if (isLoading || !data) return;
+        let dt = transformData(data?.data?.content, navigate, setIsDetailOpen, setIsDisableOpen);
+        setTData(dt);
+        setTableParams({
+            ...tableParams,
+            pagination: {
+                ...tableParams.pagination,
+                total: data?.totalElements,
+            },
+        });
+    }, [isLoading, data]);
+
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            setProductCategoryIds(selectedRows.map((item) => item.id));
         },
         getCheckboxProps: (record) => ({
-            name: record.name,
+            name: record.name, 
         }),
     };
+
     const onSearch = (value) => {
         const dt = rawData;
         const filterTable = dt.filter((o) =>
             Object.keys(o).some((k) => String(o[k]).toLowerCase().includes(value.toLowerCase())),
         );
 
-        setData(filterTable);
+        setTData(filterTable);
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            ...tableParams,
+            pagination,
+            ...sorter,
+        });
+        setParams({
+            ...params,
+            pageNo: pagination.current,
+            pageSize: pagination.pageSize
+        });
+    };
+
+    const mutationDelete = useDeleteCategory({
+        success: () => {
+            setIsDisableOpen({ ...isDisableOpen, isOpen: false });
+            notification.success({
+                message: 'Thành công'
+            });
+        },
+        error: (err) => {
+            notification.error({
+                message: 'Thất bại'
+            });
+        },
+        obj: {
+            id: isDisableOpen.id,
+            params: params,
+        },
+    });
+
+    const onDelete = async (id) => {
+        await mutationDelete.mutateAsync(id);
     };
 
     return (
@@ -116,24 +157,31 @@ function Data() {
                     onSearch={onSearch}
                 />
             </div>
+
             <Table
+                loading={isLoading}
                 rowSelection={{
                     type: 'checkbox',
                     ...rowSelection,
                 }}
                 columns={baseColumns}
-                dataSource={data}
-                pagination={{
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                }}
+                dataSource={tdata}
+                pagination={{ ...tableParams.pagination, showSizeChanger: true }}
+                onChange={handleTableChange}
             />
-            <CategoryDetail isDetailOpen={isDetailOpen} setIsDetailOpen={setIsDetailOpen} />
-            <ConfirmPrompt
-                content="Bạn có muốn ẩn danh mục này ?"
-                isDisableOpen={isDisableOpen}
-                setIsDisableOpen={setIsDisableOpen}
-            />
+
+            {/* {isDetailOpen.id !== 0 && (
+                <CategoryDetail isDetailOpen={isDetailOpen} setIsDetailOpen={setIsDetailOpen} />
+            )} */}
+
+            {isDisableOpen.id !== 0 && (
+                <ConfirmPrompt
+                    content="Bạn có muốn ẩn danh mục này ?"
+                    isDisableOpen={isDisableOpen}
+                    setIsDisableOpen={setIsDisableOpen}
+                    handleConfirm={onDelete}
+                />
+            )}
         </div>
     );
 }

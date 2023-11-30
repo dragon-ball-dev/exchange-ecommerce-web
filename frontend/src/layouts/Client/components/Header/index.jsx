@@ -201,7 +201,7 @@ const Header = () => {
                                         alt=""
                                     />
                                 </NavLink>
-                                <div className="flex items-center cursor-pointer">
+                                <Link to={config.routes.web.settings} className="flex items-center cursor-pointer">
                                     <div className="self-center flex grow basis-[0%] flex-col items-stretch my-auto max-md:-mr-2">
                                         <div className="text-gray-800 text-3xl font-bold leading-6 whitespace-nowrap">
                                             {user?.name}
@@ -220,7 +220,7 @@ const Header = () => {
                                         className="aspect-[0.95] object-contain object-center w-[52px] justify-center items-center overflow-hidden self-stretch shrink-0 max-w-full"
                                         alt=""
                                     />
-                                </div>
+                                </Link>
                                 <div className="items-stretch self-center flex justify-between gap-5 my-auto max-md:justify-center">
                                     <NavLink to={config.routes.web.chat}>
                                         <img
@@ -246,8 +246,9 @@ const Header = () => {
                                             alt=""
                                         />
                                     </NavLink>
-                                    <div className='text-[2rem] cursor-pointer' onClick={onLogout}>
+                                    <div className='text-[2rem] cursor-pointer flex justify-center items-center gap-[1rem] text-indigo-500' onClick={onLogout}>
                                         <FontAwesomeIcon icon={faSignOut} />
+                                        <p>Logout</p>
                                     </div>
                                 </div>
                             </div>

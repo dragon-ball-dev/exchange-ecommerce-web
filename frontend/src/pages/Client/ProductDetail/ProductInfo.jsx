@@ -1,19 +1,15 @@
-const ProductInfo = () => {
+const ProductInfo = ({data}) => {
     return (
         <div className="flex flex-col mt-4 px-5 max-md:max-w-full max-md:mt-10">
-            <div className="text-gray-800 text-[4rem] font-black leading-tight self-stretch -mr-5 max-md:max-w-full">
-                Seagate Backup Plus
-                <br />
-                Portable Harddrive 2TB
+            <div className="text-gray-800 text-[4rem] font-bold -mr-5 max-md:max-w-full">
+                {data?.title}
             </div>
             <div className="items-stretch self-stretch flex flex-col -mr-5 mt-12 max-md:max-w-full max-md:mt-10">
                 <div className="text-gray-800 text-2xl font-bold leading-6 whitespace-nowrap max-md:max-w-full">
                     Description
                 </div>
                 <div className="text-gray-800 text-2xl mt-2 max-md:max-w-full">
-                    Back up drive in good condition. Used to home a couple files for
-                    <br />
-                    about two years.
+                    {data?.content}
                 </div>
             </div>
             <div className="items-center flex w-[184px] max-w-full gap-[3rem] mt-8">
@@ -22,7 +18,7 @@ const ProductInfo = () => {
                     Computers
                 </div>
             </div>
-            <div className="self-stretch flex  gap-[3rem] -mr-5 mt-9 pr-16 max-md:max-w-full max-md:flex-wrap max-md:pr-5">
+            {/* <div className="self-stretch flex  gap-[3rem] -mr-5 mt-9 pr-16 max-md:max-w-full max-md:flex-wrap max-md:pr-5">
                 <div className="text-gray-800 text-2xl font-bold leading-6 mt-2">Condition</div>
                 <div className="max-w-[338px] self-stretch bg-violet-50 flex justify-between gap-2 pl-4 pr-9 py-3.5 rounded-2xl max-md:pr-5">
                     <img
@@ -41,8 +37,8 @@ const ProductInfo = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="items-stretch self-stretch flex flex-col -mr-5 mt-8 ">
+            </div> */}
+            {/* <div className="items-stretch self-stretch flex flex-col -mr-5 mt-8 ">
                 <div className="text-gray-800 text-2xl font-bold leading-6 whitespace-nowrap max-md:max-w-full">
                     Meeting spots
                 </div>
@@ -59,7 +55,7 @@ const ProductInfo = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
