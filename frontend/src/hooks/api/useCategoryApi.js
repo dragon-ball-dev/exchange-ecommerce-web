@@ -18,3 +18,11 @@ export const useCreateCategory = (updater) => {
 export const useGetCategory = (id) => {
     return useFetch({ url: apiRoutes.admin.category + '/' + id, key: 'getCategory' });
 }
+
+export const useGetListCategory = (params) => {
+    return useFetch({ url: apiRoutes.admin.category, key: 'getListCategory', params });
+}
+
+export const useDeleteCategory = (updater) => {
+    return useDelete(apiRoutes.admin.category, updater);
+}

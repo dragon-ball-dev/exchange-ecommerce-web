@@ -1,22 +1,25 @@
-import { NavLink, Navigate } from 'react-router-dom';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 import config from '../../../config';
 import { Button, Form, Input, notification } from 'antd';
 import FormItem from 'antd/es/form/FormItem';
-import { useRegister } from '../../../hooks/api/useAuthApi';
+import { useConfirmEmail, useRegister } from '../../../hooks/api/useAuthApi';
 import { useState } from 'react';
 import { isTokenStoraged } from '../../../utils/storage';
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const [processing, setProcessing] = useState(false);
     const [form] = Form.useForm();
+    const mutateConfirm = useConfirmEmail();
     const mutationRegister = useRegister({
         success: (data) => {
             notification.success({
-                message: 'Đăng ký thành công',
-                description:
-                    'Bạn đã đăng ký thành công tài khoản, vui lòng lấy mã OTP để xác thực tài khoản',
+                message: 'Đăng ký thành công'
             });
-            navigate(config.routes.web.otp_verify + '?email=' + form.getFieldValue('email'));
+            mutateConfirm.mutate({
+                email: form.getFieldValue('email'),
+            });
+            navigate(config.routes.web.login);
         },
         error: (err) => {
             let description = 'Có lỗi xảy ra khi đăng ký, vui lòng thử lại sau';
@@ -48,10 +51,10 @@ const RegisterPage = () => {
     };
 
     if (isTokenStoraged()) {
-        let roles = getRoles();
-        let url = '/';
+        // let roles = getRoles();
+        let url = config.routes.web.home;
 
-        if (roles.includes('ADMIN')) url = config.routes.admin.dashboard;
+        // if (roles.includes('ADMIN')) url = config.routes.admin.dashboard;
 
         return <Navigate to={url} replace />;
     }

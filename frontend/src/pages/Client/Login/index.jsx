@@ -57,10 +57,10 @@ const LoginPage = () => {
     };
 
     if (isTokenStoraged()) {
-        let roles = getRoles();
+        // let roles = getRoles();
         let url = config.routes.web.home;
 
-        if (roles?.includes('ADMIN')) url = config.routes.admin.dashboard;
+        // if (roles?.includes('ADMIN')) url = config.routes.admin.dashboard;
 
         return <Navigate to={url} replace />;
     }

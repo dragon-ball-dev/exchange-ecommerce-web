@@ -4,6 +4,7 @@ const apiRoutes = {
         login: '/auth/login',
         register: '/auth/signup',
         changePassword: '/auth/change-password',
+        confirmed: '/auth/confirmed',
     },
     user: {
         me: '/user/me'
