@@ -12,7 +12,11 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void Producer(String senderName, String receiverName) {
-		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+//		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+        connectionFactory.setBrokerURL("tcp://localhost:61616");
+        connectionFactory.setUserName("artemis");
+        connectionFactory.setPassword("artemis");
         Connection connection;
         Session session;
         try {
@@ -42,7 +46,11 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public void Consumer(String senderName, String receiverName) {
-		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+//		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
+        connectionFactory.setBrokerURL("tcp://localhost:61616");
+        connectionFactory.setUserName("artemis");
+        connectionFactory.setPassword("artemis");
         Connection connection;
         Session session;
         try {
