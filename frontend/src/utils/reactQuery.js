@@ -83,6 +83,10 @@ export const usePost = (url, updater) => {
     return useGenericMutation((data) => api.post(url, data), url, updater);
 };
 
+export const usePostWithId = (url, updater) => {
+    return useGenericMutation((id, data) => api.post(url + '/' + id, data), url, updater);
+};
+
 export const usePostQuery = (url, updater) => {
     return useGenericMutation((data) => api.post(url + "?" + encodeQueryData(data), data), url, updater);
 };

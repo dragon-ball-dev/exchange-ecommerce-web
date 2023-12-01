@@ -20,6 +20,7 @@ const routes = {
         profile: '/profile',
         settings: '/settings/profile',
         create_post: '/post/new',
+        post: '/post',
         create_iso: '/iso/new',
         chat: '/chat',
         product_detail: '/product-detail',

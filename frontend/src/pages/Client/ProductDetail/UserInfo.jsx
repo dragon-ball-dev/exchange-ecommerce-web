@@ -20,7 +20,7 @@ const UserInfo = ({data, refetch}) => {
     }
 
     return (
-        <section className="flex w-[700px] max-w-full flex-col items-stretch mt-6 self-end">
+        <section className="flex w-[700px] max-w-full flex-col items-stretch mt-16 self-end">
             <header className="justify-between flex w-full gap-5 pb-1.5 px-5 max-md:max-w-full max-md:flex-wrap">
                 <div className="text-gray-500 text-2xl font-bold leading-6">
                     <span className="font-bold text-gray-800">{new Date(data?.date).toLocaleString()}</span>
@@ -51,8 +51,7 @@ const UserInfo = ({data, refetch}) => {
                     />
                     <div className="text-gray-800 text-xl font-bold leading-7 self-center whitespace-nowrap my-auto">
                         <a
-                            href="https://bunz.com/profile/JenTo91"
-                            target="_blank"
+                            href=""
                             rel="noopener noreferrer"
                         >
                             Jen McLean

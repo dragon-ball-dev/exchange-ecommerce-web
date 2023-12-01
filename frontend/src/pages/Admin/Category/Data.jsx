@@ -1,7 +1,7 @@
 import { faEdit, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import { faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Input, Table, Tag } from 'antd';
+import { Button, Input, Table, Tag, notification } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import config from '../../../config';
@@ -70,13 +70,13 @@ function Data({ setProductCategoryIds, params, setParams }) {
         isOpen: false,
     });
     const navigate = useNavigate();
-    const { data, isLoading } = useGetListCategory(params);
+    const { data, isLoading, refetch } = useGetListCategory(params);
     const [tdata, setTData] = useState([]);
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: params.pageNo,
             pageSize: params.pageSize,
-            total: data?.data?.totalItems,
+            total: data?.totalElements,
         },
     });
 
@@ -93,14 +93,6 @@ function Data({ setProductCategoryIds, params, setParams }) {
         });
     }, [isLoading, data]);
 
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            setProductCategoryIds(selectedRows.map((item) => item.id));
-        },
-        getCheckboxProps: (record) => ({
-            name: record.name, 
-        }),
-    };
 
     const onSearch = (value) => {
         const dt = rawData;
@@ -130,6 +122,7 @@ function Data({ setProductCategoryIds, params, setParams }) {
             notification.success({
                 message: 'Thành công'
             });
+            refetch();
         },
         error: (err) => {
             notification.error({
@@ -160,10 +153,6 @@ function Data({ setProductCategoryIds, params, setParams }) {
 
             <Table
                 loading={isLoading}
-                rowSelection={{
-                    type: 'checkbox',
-                    ...rowSelection,
-                }}
                 columns={baseColumns}
                 dataSource={tdata}
                 pagination={{ ...tableParams.pagination, showSizeChanger: true }}

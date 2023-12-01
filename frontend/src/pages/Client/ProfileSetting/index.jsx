@@ -1,14 +1,22 @@
-import { Col, Row, Tabs } from 'antd';
+import { Button, Col, Row, Tabs } from 'antd';
 import './profilesetting.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import Profile from './Profile';
 import ChangePassword from './ChangePassword';
+import { useEffect } from 'react';
+import { clearToken } from '../../../utils/storage';
+import config from '../../../config';
 
 const ProfileSettingPage = () => {
     const navigate = useNavigate();
     const { tagFunction } = useParams();
     const onChange = (v) => {
+        if (v === 'logout') return;
         navigate(`/settings/profile/${v}`);
+    };
+    const onLogout = () => {
+        clearToken();
+        window.location.href = config.routes.web.login;
     };
 
     return (
@@ -28,12 +36,12 @@ const ProfileSettingPage = () => {
                                     key: '',
                                 },
                                 {
-                                    label: `Verify your account`,
-                                    key: 'verify-account',
-                                },
-                                {
                                     label: `Change password`,
                                     key: 'change-password',
+                                },
+                                {
+                                    label: `Verify your account`,
+                                    key: 'verify-account',
                                 },
                                 {
                                     label: `Change email`,
@@ -42,14 +50,11 @@ const ProfileSettingPage = () => {
                             ]}
                         />
                     </div>
+                    <Button onClick={onLogout} className='mt-5 bg-red-500 text-white ml-32 '>Logout</Button>
                 </Col>
                 <Col span={18}>
-                    {!tagFunction && (
-                        <Profile />
-                    )}
-                    {tagFunction === 'change-password' && (
-                        <ChangePassword />
-                    )}
+                    {!tagFunction && <Profile />}
+                    {tagFunction === 'change-password' && <ChangePassword />}
                 </Col>
             </Row>
         </div>
