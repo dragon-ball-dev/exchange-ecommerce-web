@@ -1,0 +1,14 @@
+package com.ecommerce.backend.domain.payload.request;
+
+import com.ecommerce.backend.domain.enums.TransactionStatusName;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+public class UpdateTransactionStatusRequest {
+
+    private TransactionStatusName newStatus;
+}
