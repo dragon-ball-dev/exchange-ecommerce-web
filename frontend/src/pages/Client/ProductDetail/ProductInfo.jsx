@@ -8,7 +8,12 @@ const ProductInfo = ({ data }) => {
             <div className="text-gray-800 text-[4rem] font-bold -mr-5 max-md:max-w-full">
                 {data?.title}
             </div>
-            <Link to={config.routes.web.chat} className="w-1/2 flex justify-center items-center text-white rounded-[3rem] bg-yellow-400 h-20 text-[2rem]">Start chat</Link>
+            <Link
+                to={config.routes.web.chat + '/' + data?.id}
+                className="w-1/2 flex justify-center items-center text-white rounded-[3rem] bg-yellow-400 h-20 text-[2rem]"
+            >
+                Start chat
+            </Link>
             <div className="items-stretch self-stretch flex flex-col -mr-5 mt-12 max-md:max-w-full max-md:mt-10">
                 <div className="text-gray-800 text-2xl font-bold leading-6 whitespace-nowrap max-md:max-w-full">
                     Description

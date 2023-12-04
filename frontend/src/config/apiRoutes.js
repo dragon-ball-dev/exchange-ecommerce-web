@@ -15,6 +15,7 @@ const apiRoutes = {
     web: {
         user: '/auth/upload-profile',
         post: '/post',
+        user_chat: '/user/message',
     },
 };
 

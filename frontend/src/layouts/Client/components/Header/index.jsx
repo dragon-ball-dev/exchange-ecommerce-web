@@ -10,11 +10,11 @@ import { faSignOut } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
     const { data, isLoading, refetch } = useGetMe();
-    const [auth, setAuth] = useState(false);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
         if (isLoading) return;
+        localStorage.setItem('userId', data.id);
         setUser(data);
     }, [isLoading, data]);
 
