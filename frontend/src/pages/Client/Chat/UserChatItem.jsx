@@ -1,6 +1,7 @@
-const UserChatItem = ({ userChat }) => {
+const UserChatItem = ({ userChat, chosenUserId }) => {
+
     return (
-        <div className="bg-indigo-50 flex items-stretch justify-between gap-5 px-5 rounded-sm max-md:justify-center max-md:mb-10">
+        <div className="bg-indigo-50 my-3 flex items-stretch justify-between gap-5 px-5 rounded-sm max-md:justify-center max-md:mb-10">
             <div className="bg-violet-700 flex w-1 shrink-0 h-24 flex-col rounded-sm" />
             <img
                 loading="lazy"

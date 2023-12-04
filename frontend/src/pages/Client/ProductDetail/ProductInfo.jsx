@@ -1,15 +1,39 @@
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import config from '../../../config';
+import { useCreateTransaction } from '../../../hooks/api/useTransactionApi';
 
 const ProductInfo = ({ data }) => {
+
+    const mutateCreateTransaction = useCreateTransaction({
+        success: () => {
+            notification.success({
+                message: "Create transaction success",
+            });
+        },
+        error: () => {
+            notification.error({
+                message: "Create transaction failed",
+            });
+        }
+    });
+    const onCreateTransaction = async () => {
+        await mutateCreateTransaction.mutateAsync({
+            post1Id: data?.id,
+            transactionTypeId: 2,
+            user2Id: localStorage.getItem("userId"),
+            date: new Date().toLocaleString(),
+        });
+    }
+
     return (
         <div className="flex flex-col mt-4 px-5 max-md:max-w-full max-md:mt-10">
             <div className="text-gray-800 text-[4rem] font-bold -mr-5 max-md:max-w-full">
                 {data?.title}
             </div>
             <Link
-                to={config.routes.web.chat + '/' + data?.id}
+                onClick={onCreateTransaction}
+                to={config.routes.web.chat}
                 className="w-1/2 flex justify-center items-center text-white rounded-[3rem] bg-yellow-400 h-20 text-[2rem]"
             >
                 Start chat

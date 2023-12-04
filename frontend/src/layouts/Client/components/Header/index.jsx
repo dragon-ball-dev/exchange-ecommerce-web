@@ -13,8 +13,8 @@ const Header = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (isLoading) return;
-        localStorage.setItem('userId', data.id);
+        if (isLoading || !data) return;
+        localStorage.setItem('userId', data?.id);
         setUser(data);
     }, [isLoading, data]);
 

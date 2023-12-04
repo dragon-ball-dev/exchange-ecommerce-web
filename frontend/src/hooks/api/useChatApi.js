@@ -12,6 +12,10 @@ import {
     usePostForm,
 } from '../../utils/reactQuery';
 
-export const useGetUserMessage = (id) => {
-    return useFetch({ url: apiRoutes.web.user_chat + '/' + id, key: 'getUserChat' });
+export const useGetUserMessage = () => {
+    return useFetch({ url: apiRoutes.web.user_message, key: 'getUserMessage' });
+};
+
+export const useGetUserMessageChat = (id) => {
+    return useFetch({ url: apiRoutes.web.user_message_chat + '/' + id, key: 'getUserMessageChat' });
 };

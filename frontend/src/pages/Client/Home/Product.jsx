@@ -13,10 +13,10 @@ const Product = () => {
                 <div className="justify-center text-gray-800 text-6xl font-bold leading-[58px] self-stretch whitespace-nowrap mt-16 max-md:max-w-full max-md:text-4xl max-md:leading-10 max-md:mt-10">
                     You might like it
                 </div>
-                <div className="self-stretch flex items-start justify-between gap-5 mt-9 max-md:max-w-full max-md:flex-wrap max-md:justify-center">
+                <div className="flex ">
                     {data?.content?.map((item) => {
                         return (
-                            <Link to={`${config.routes.web.product_detail}/${item.id}`} className="border border-solid border-black p-5">
+                            <Link to={`${config.routes.web.product_detail}/${item.id}`} className="p-5">
                                 <div className="justify-center items-stretch  flex flex-col rounded-2xl">
                                     <img
                                         loading="lazy"

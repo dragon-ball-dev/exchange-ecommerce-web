@@ -1,8 +1,12 @@
-import { useGetUserMessage } from "../../../hooks/api/useChatApi";
-import UserChatItem from "./UserChatItem";
+import { useGetUserMessage } from '../../../hooks/api/useChatApi';
+import UserChatItem from './UserChatItem';
 
-const UserChat = () => {
-    const {data, isLoading} = useGetUserMessage(localStorage.getItem("userId"));
+const UserChat = ({ data, chosenUserId, setChosenUserId }) => {
+
+    const onChosenUserChat = (userId) => {
+        setChosenUserId(userId);
+    }
+
     return (
         <div className="items-stretch self-stretch flex grow flex-col pb-12  border-r-opacity-10 border-r border-solid">
             <section className="">
@@ -20,11 +24,12 @@ const UserChat = () => {
                     </div>
                 </header>
                 <div>
-                    {
-                        data && data.map((item, index) => (
-                            <UserChatItem key={index} userChat={item} />
-                        ))
-                    }
+                    {data?.data?.content &&
+                        data?.data?.content?.map((item, index) => (
+                            <div onClick={onChosenUserChat}>
+                                <UserChatItem chosenUserId={chosenUserId} key={index} userChat={item} />
+                            </div>
+                        ))}
                 </div>
             </section>
         </div>
