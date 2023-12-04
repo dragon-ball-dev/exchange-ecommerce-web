@@ -1,5 +1,6 @@
 package com.ecommerce.backend.services;
 
+import com.ecommerce.backend.domain.dto.CategoryDTO;
 import com.ecommerce.backend.domain.dto.TransactionDTO;
 import com.ecommerce.backend.domain.payload.request.ScheduleExchangeRequest;
 import com.ecommerce.backend.domain.payload.request.UpdateTransactionStatusRequest;
@@ -9,7 +10,8 @@ import java.time.LocalDateTime;
 
 public interface TransactionService {
 
-    void createNewTrade(TransactionDTO tradeDTO);
+    void createNewTransaction(TransactionDTO tradeDTO);
+    void updateTransaction(Long id, TransactionDTO transactionDTO);
     void updateTransactionStatus(Long id, UpdateTransactionStatusRequest request);
     Page<TransactionDTO> getListTransactionByUser(Integer pageNo, Integer pageSize);
     void scheduleAnExchange(Long id, ScheduleExchangeRequest scheduleExchangeRequest);
