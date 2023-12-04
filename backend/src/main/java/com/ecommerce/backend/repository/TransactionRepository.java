@@ -1,16 +1,12 @@
 package com.ecommerce.backend.repository;
 
 import com.ecommerce.backend.domain.models.Transaction;
-import com.ecommerce.backend.domain.models.TransactionStatus;
 import com.ecommerce.backend.domain.models.TransactionType;
-import org.apache.kahadb.page.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Repository
@@ -32,4 +28,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
 //    @Query(value = "FROM transaction t SELECT t.date WHERE t.id = :id", nativeQuery = true)
 //    String findDateByIdTransaction(Long id);
+
+    @Query(value = "SELECT * FROM transaction t WHERE t.id = :id", nativeQuery = true)
+    Optional<Transaction> getTransactionById(Long id);
+
 }

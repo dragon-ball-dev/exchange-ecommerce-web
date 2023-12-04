@@ -43,9 +43,29 @@ public class TransactionController extends BaseController {
     private ResponseEntity<?> createPost(
             @RequestBody TransactionDTO transactionDTO
     ){
-        transactionService.createNewTrade(transactionDTO);
+        transactionService.createNewTransaction(transactionDTO);
         return createSuccessResponse("Create a new transaction", HttpStatus.CREATED);
     }
+
+    @PutMapping("/update/{id}")
+    @Operation(summary = "Update Status transaction")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "update a transaction successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    private ResponseEntity<?> updateTransaction(
+            @PathVariable Long id,
+            @RequestBody TransactionDTO transactionDTO
+    ){
+        transactionService.updateTransaction(id, transactionDTO);
+        return createSuccessResponse("update transaction", HttpStatus.CREATED);
+    }
+
 
     @PutMapping("/updateStatus/{id}")
     @Operation(summary = "Update Status transaction")
@@ -58,7 +78,7 @@ public class TransactionController extends BaseController {
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
-    private ResponseEntity<?> updatePost(
+    private ResponseEntity<?> updateStatus(
             @PathVariable Long id,
             @RequestBody UpdateTransactionStatusRequest newTransactionStatus
     ){
@@ -94,7 +114,7 @@ public class TransactionController extends BaseController {
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
             content = {@Content(mediaType = "application/json",
                     schema = @Schema(implementation = ExtendedMessage.class))})
-    private ResponseEntity<?> updatePost(
+    private ResponseEntity<?> updateDate(
             @PathVariable Long id,
             @RequestBody ScheduleExchangeRequest scheduleExchangeRequest
             ){
