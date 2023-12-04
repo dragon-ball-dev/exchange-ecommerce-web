@@ -132,12 +132,12 @@ public class TransactionServiceImpl extends BaseService implements TransactionSe
     }
 
     @Override
-    public Page<TransactionDTO> getListTransactionByUser(Integer pageNo, Integer pageSize) {
-        List<TransactionDTO> list;
+    public Page<Transaction> getListTransactionByUser(Integer pageNo, Integer pageSize) {
+        List<Transaction> list;
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
         if (Objects.nonNull(getUserId())) {
-            list = mapper.convertToResponseList(transactionRepository.getListTransactionByUser(getUserId()), TransactionDTO.class);
+            list = mapper.convertToResponseList(transactionRepository.getListTransactionByUser(getUserId()), Transaction.class);
         } else {
             throw new IllegalArgumentException("User not found");
         }
