@@ -15,6 +15,10 @@ export const useCreateCategory = (updater) => {
     return usePost(apiRoutes.admin.category, updater);
 };
 
+export const useUpdateCategory = (updater) => {
+    return usePut(apiRoutes.admin.category, updater);
+};
+
 export const useGetCategory = (id) => {
     return useFetch({ url: apiRoutes.admin.category + '/' + id, key: 'getCategory' });
 }

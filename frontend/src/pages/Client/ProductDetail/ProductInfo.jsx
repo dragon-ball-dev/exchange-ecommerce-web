@@ -1,14 +1,54 @@
-import { Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Button, notification } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 import config from '../../../config';
+import { useCreateTransaction } from '../../../hooks/api/useTransactionApi';
 
 const ProductInfo = ({ data }) => {
+    let loginUserId = parseInt(localStorage.getItem('userId'));
+    const navigate = useNavigate();
+    const mutateCreateTransaction = useCreateTransaction({
+        success: () => {
+            notification.success({
+                message: 'Create transaction success',
+            });
+            navigate(config.routes.web.chat);
+        },
+        error: () => {
+            notification.error({
+                message: 'Create transaction failed',
+            });
+        },
+    });
+    const onCreateTransaction = async () => {
+        await mutateCreateTransaction.mutateAsync({
+            post1Id: data?.id,
+            transactionTypeId: 2,
+            user2Id: localStorage.getItem('userId'),
+            date: new Date().toISOString(),
+        });
+    };
+
     return (
         <div className="flex flex-col mt-4 px-5 max-md:max-w-full max-md:mt-10">
             <div className="text-gray-800 text-[4rem] font-bold -mr-5 max-md:max-w-full">
                 {data?.title}
             </div>
-            <Link to={config.routes.web.chat} className="w-1/2 flex justify-center items-center text-white rounded-[3rem] bg-yellow-400 h-20 text-[2rem]">Start chat</Link>
+            {loginUserId !== data?.userId?.id ? (
+                !data?.complete ? (
+                    <Button
+                        onClick={onCreateTransaction}
+                        className="w-1/2 flex justify-center items-center text-white rounded-[3rem] bg-yellow-400 h-20 text-[2rem]"
+                    >
+                        Start chat
+                    </Button>
+                ) : (
+                    <Button className="bg-green-400 my-3">Giao dịch hoàn thành</Button>
+                )
+            ) : (
+                data?.complete && (
+                    <Button className="bg-green-400 my-3">Giao dịch hoàn thành</Button>
+                )
+            )}
             <div className="items-stretch self-stretch flex flex-col -mr-5 mt-12 max-md:max-w-full max-md:mt-10">
                 <div className="text-gray-800 text-2xl font-bold leading-6 whitespace-nowrap max-md:max-w-full">
                     Description
@@ -17,7 +57,7 @@ const ProductInfo = ({ data }) => {
             </div>
             <div className="items-center flex w-[184px] max-w-full gap-[3rem] mt-8">
                 <div className="text-gray-800 text-2xl font-bold leading-6 my-auto">Category</div>
-                <div className="text-gray-800 text-2xl leading-7 ">{data?.categoryId}</div>
+                <div className="text-gray-800 text-2xl leading-7 ">{data?.categoryId?.name}</div>
             </div>
             {/* <div className="self-stretch flex  gap-[3rem] -mr-5 mt-9 pr-16 max-md:max-w-full max-md:flex-wrap max-md:pr-5">
                 <div className="text-gray-800 text-2xl font-bold leading-6 mt-2">Condition</div>

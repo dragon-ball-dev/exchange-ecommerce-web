@@ -10,11 +10,11 @@ import { faSignOut } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
     const { data, isLoading, refetch } = useGetMe();
-    const [auth, setAuth] = useState(false);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (isLoading) return;
+        if (isLoading || !data) return;
+        localStorage.setItem('userId', data?.id);
         setUser(data);
     }, [isLoading, data]);
 
@@ -24,7 +24,7 @@ const Header = () => {
         window.location.href = config.routes.web.login;
     };
 
-    if(isTokenStoraged()) {
+    if (isTokenStoraged()) {
         refetch();
     }
 
@@ -48,6 +48,11 @@ const Header = () => {
                         <div className="text-blue-800 text-3xl font-bold leading-4 whitespace-nowrap">
                             <NavLink to={config.routes.web.about}>Why Bunz</NavLink>
                         </div>
+                        {data?.roles?.some((x) => x.name === 'ROLE_ADMIN') && (
+                            <div className="text-blue-800 text-3xl font-bold leading-4 whitespace-nowrap">
+                                <NavLink to={config.routes.admin.dashboard}>Admin</NavLink>
+                            </div>
+                        )}
                     </div>
                     {isTokenStoraged() && user ? (
                         <>
@@ -201,7 +206,10 @@ const Header = () => {
                                         alt=""
                                     />
                                 </NavLink>
-                                <Link to={config.routes.web.settings} className="flex items-center cursor-pointer">
+                                <Link
+                                    to={config.routes.web.settings}
+                                    className="flex items-center cursor-pointer"
+                                >
                                     <div className="self-center flex grow basis-[0%] flex-col items-stretch my-auto max-md:-mr-2">
                                         <div className="text-gray-800 text-3xl font-bold leading-6 whitespace-nowrap">
                                             {user?.name}
@@ -246,7 +254,10 @@ const Header = () => {
                                             alt=""
                                         />
                                     </NavLink>
-                                    <div className='text-[2rem] cursor-pointer flex justify-center items-center gap-[1rem] text-indigo-500' onClick={onLogout}>
+                                    <div
+                                        className="text-[2rem] cursor-pointer flex justify-center items-center gap-[1rem] text-indigo-500"
+                                        onClick={onLogout}
+                                    >
                                         <FontAwesomeIcon icon={faSignOut} />
                                         <p>Logout</p>
                                     </div>

@@ -1,8 +1,14 @@
-import UserChatItem from "./UserChatItem";
+import { useGetUserMessage } from '../../../hooks/api/useChatApi';
+import UserChatItem from './UserChatItem';
 
-const UserChat = () => {
+const UserChat = ({ data, chosenUserChat, setChosenUserChat }) => {
+    const onChosenUserChat = (item) => {
+        console.log(item);
+        setChosenUserChat(item);
+    };
+
     return (
-        <div className="items-stretch self-stretch flex grow flex-col pb-12  border-r-opacity-10 border-r border-solid">
+        <div className="items-stretch w-2/5 self-stretch flex  flex-col pb-12  border-r-opacity-10 border-r border-solid">
             <section className="">
                 <header className="bg-white flex w-full flex-col px-5 py-5  border-b-opacity-10 border-b border-solid">
                     <div className="items-center flex w-[118px] max-w-full gap-2.5">
@@ -18,7 +24,16 @@ const UserChat = () => {
                     </div>
                 </header>
                 <div>
-                    <UserChatItem />
+                    {data?.data?.content &&
+                        data?.data?.content?.map((item, index) => (
+                            <div className='cursor-pointer hover:bg-indigo-50' onClick={() => onChosenUserChat(item)}>
+                                <UserChatItem
+                                    chosenUserChat={chosenUserChat}
+                                    key={index}
+                                    userChat={item}
+                                />
+                            </div>
+                        ))}
                 </div>
             </section>
         </div>

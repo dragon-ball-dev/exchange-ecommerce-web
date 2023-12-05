@@ -43,7 +43,7 @@ function transformData(dt, navigate, setIsDetailOpen, setIsDisableOpen) {
                     <Button
                         className="text-green-500 border border-green-500"
                         onClick={() =>
-                            navigate(`${config.routes.admin.category}/${item.id}`)
+                            navigate(`${config.routes.admin.category}/update/${item.id}`)
                         }
                     >
                         <FontAwesomeIcon icon={faEdit} />
@@ -93,14 +93,14 @@ function Data({ setProductCategoryIds, params, setParams }) {
         });
     }, [isLoading, data]);
 
-
     const onSearch = (value) => {
-        const dt = rawData;
-        const filterTable = dt.filter((o) =>
-            Object.keys(o).some((k) => String(o[k]).toLowerCase().includes(value.toLowerCase())),
-        );
+        // const dt = transformData(data?.data?.content, navigate, setIsDetailOpen, setIsDisableOpen);
+        // if (!value) return;
+        // const filterTable = dt.filter((o) =>
+        //     Object.keys(o).some((k) => String(o[k]).toLowerCase().includes(value.toLowerCase())),
+        // );
 
-        setTData(filterTable);
+        // setTData(filterTable);
     };
 
     const handleTableChange = (pagination, filters, sorter) => {
@@ -112,7 +112,7 @@ function Data({ setProductCategoryIds, params, setParams }) {
         setParams({
             ...params,
             pageNo: pagination.current,
-            pageSize: pagination.pageSize
+            pageSize: pagination.pageSize,
         });
     };
 
@@ -120,13 +120,13 @@ function Data({ setProductCategoryIds, params, setParams }) {
         success: () => {
             setIsDisableOpen({ ...isDisableOpen, isOpen: false });
             notification.success({
-                message: 'Thành công'
+                message: 'Thành công',
             });
             refetch();
         },
         error: (err) => {
             notification.error({
-                message: 'Thất bại'
+                message: 'Thất bại',
             });
         },
         obj: {

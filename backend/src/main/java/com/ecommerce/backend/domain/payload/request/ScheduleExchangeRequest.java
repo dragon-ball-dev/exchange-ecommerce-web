@@ -4,11 +4,12 @@ import com.ecommerce.backend.domain.enums.TransactionStatusName;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class ScheduleExchangeRequest {
 
-    private LocalDateTime dateTimeExchange;
+    private Instant dateTimeExchange;
 }

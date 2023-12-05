@@ -6,6 +6,7 @@ import com.ecommerce.backend.domain.models.audit.DateAudit;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,7 +35,7 @@ public class Transaction extends DateAudit {
     private TransactionStatus transactionStatus;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private Instant date;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post2_id")

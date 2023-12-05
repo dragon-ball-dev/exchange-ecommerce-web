@@ -51,7 +51,7 @@ function UpdatePostFormPage() {
             form.setFieldsValue({
                 title: data?.title,
                 content: data?.content,
-                categoryId: data?.categoryId,
+                categoryId: data?.categoryId?.id,
             });
             setImageUrl(data?.image);
         }
