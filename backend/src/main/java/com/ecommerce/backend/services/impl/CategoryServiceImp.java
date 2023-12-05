@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +32,13 @@ public class CategoryServiceImp implements CategoryService {
         Pageable pageable = PageRequest.of(page, pageSize);
         List<CategoryDTO> list = mapper.convertToResponseList(categoryRepository.findAll(), CategoryDTO.class);
         return new PageImpl<>(list, pageable, list.size());
+    }
+
+    @Override
+    public Category getCategoryByID(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category is not exist"));
+        return category;
     }
 
     @Override

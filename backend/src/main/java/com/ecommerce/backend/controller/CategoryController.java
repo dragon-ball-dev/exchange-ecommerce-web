@@ -58,6 +58,21 @@ public class CategoryController extends BaseController {
         return createSuccessResponse("Get paging of categories", categoryService.getPagingBrand(pageNo, pageSize));
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "Get category by ID")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Get category by ID successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    public ResponseEntity<?> getCategoryByID(@PathVariable Long id) {
+        return createSuccessResponse("Get category by ID", categoryService.getCategoryByID(id));
+    }
+
     @PutMapping("/{id}")
     @Operation(summary = "Update category ")
     @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Update category successful",

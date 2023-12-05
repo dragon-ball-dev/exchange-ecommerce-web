@@ -55,19 +55,19 @@ public class PostServiceImp extends BaseService implements PostService {
     }
 
     @Override
-    public Page<PostDTO> getPagingPost(Integer pageNo, Integer pageSize) {
+    public Page<Post> getPagingPost(Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Post> postPage = postRepository.findAll(pageable);
-        return mapper.convertToResponsePage(postPage, PostDTO.class, pageable);
+        return mapper.convertToResponsePage(postPage, Post.class, pageable);
     }
 
     @Override
-    public Page<PostDTO> getPagingPostFilter(Long category, Integer sortBy, FilterSortUser filterSortUser, Integer pageNo, Integer pageSize) {
+    public Page<Post> getPagingPostFilter(Long category, Integer sortBy, FilterSortUser filterSortUser, Integer pageNo, Integer pageSize) {
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Post> postPage = postRepositoryCustom.getAllPostForParam(category, sortBy, filterSortUser, pageable, getUserId());
-        return mapper.convertToResponsePage(postPage, PostDTO.class, pageable);
+        return mapper.convertToResponsePage(postPage, Post.class, pageable);
     }
 
 
