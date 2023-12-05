@@ -22,7 +22,7 @@ const ProductInfo = ({ data }) => {
             post1Id: data?.id,
             transactionTypeId: 2,
             user2Id: localStorage.getItem("userId"),
-            date: new Date().toLocaleString(),
+            date: new Date().toISOString(),
         });
     }
 

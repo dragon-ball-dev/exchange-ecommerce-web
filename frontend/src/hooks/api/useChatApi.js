@@ -19,3 +19,10 @@ export const useGetUserMessage = () => {
 export const useGetUserMessageChat = (id) => {
     return useFetch({ url: apiRoutes.web.user_message_chat + '/' + id, key: 'getUserMessageChat' });
 };
+
+// export const useSendMessage = (userId1, userId2) => {
+//     return usePost({
+//         url: apiRoutes.web.user_message_chat + '/' + userId1 + '/' + userId2,
+//         key: 'sendMessage',
+//     });
+// };
