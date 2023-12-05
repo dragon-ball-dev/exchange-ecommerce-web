@@ -3,6 +3,7 @@ import UserChatItem from './UserChatItem';
 
 const UserChat = ({ data, chosenUserChat, setChosenUserChat }) => {
     const onChosenUserChat = (item) => {
+        console.log(item);
         setChosenUserChat(item);
     };
 

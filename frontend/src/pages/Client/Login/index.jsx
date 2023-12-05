@@ -6,6 +6,7 @@ import { useLogin } from '../../../hooks/api/useAuthApi';
 
 import {saveToken, getRoles, isTokenStoraged} from '../../../utils/storage';
 import FormItem from 'antd/es/form/FormItem';
+import { useGetMe } from '../../../hooks/api/useUserApi';
 
 const LoginPage = () => {
     const [processing, setProcessing] = useState(false);
@@ -14,15 +15,16 @@ const LoginPage = () => {
 
     const handleToken = (token) => {
         saveToken(token);
-        let roles = getRoles();
-        let url = '/';
-
-        if (roles?.includes('ADMIN')) url = config.routes.admin.dashboard;
+        // refetch();
+        // let url = '/';
+        // let roles = data?.roles?.map((role) => role?.name);
+        // console.log(roles)
+        // if (roles?.includes('ADMIN')) url = config.routes.admin.dashboard;
         notification.success({
             message: 'Đăng nhập thành công',
             description: 'Chào mừng bạn đến với hệ thống của chúng tôi',
         });
-        navigate(url);
+        // navigate(url);
     };
 
     const mutationLogin = useLogin({

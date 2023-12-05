@@ -22,7 +22,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -127,7 +129,12 @@ public class TransactionServiceImpl extends BaseService implements TransactionSe
 
         TransactionStatus transactionStatus = transactionStatusRepository.findByName(request.getNewStatus()).orElseThrow(() -> new IllegalArgumentException("Status is not exist!"));
         transaction.setTransactionStatus(transactionStatus);
-
+        if(transactionStatus.getName() == TransactionStatusName.COMPLETED){
+            Post post = postRepository.findById(transaction.getPost1().getId()).orElseThrow(() -> new IllegalArgumentException("Post is not exist!"));
+            post.setUpdatedAt(LocalDateTime.now());
+            post.setComplete(true);
+            postRepository.save(post);
+        }
         transactionRepository.save(transaction);
     }
 
@@ -137,13 +144,18 @@ public class TransactionServiceImpl extends BaseService implements TransactionSe
         int page = pageNo == 0 ? pageNo : pageNo - 1;
         Pageable pageable = PageRequest.of(page, pageSize);
         if (Objects.nonNull(getUserId())) {
-            list = mapper.convertToResponseList(transactionRepository.getListTransactionByUser(getUserId()), Transaction.class);
+            list = new ArrayList<>(mapper.convertToResponseList(transactionRepository.getListTransactionByUser(getUserId()), Transaction.class));
         } else {
             throw new IllegalArgumentException("User not found");
         }
 
 //        List<TransactionDTO> list = mapper.convertToResponseList(transactionRepository.getListTransactionByUser(getUserId()), TransactionDTO.class);
         return new PageImpl<>(list, pageable, list.size());
+    }
+
+    @Override
+    public Transaction getTransactionById(Long id) {
+        return transactionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Transaction is not exist!"));
     }
 
     @Override
@@ -155,7 +167,7 @@ public class TransactionServiceImpl extends BaseService implements TransactionSe
     }
 
     @Override
-    public LocalDateTime getDateByIdTransaction(Long id) {
+    public Instant getDateByIdTransaction(Long id) {
         return transactionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Transaction is not exist!")).getDate();
     }
 }

@@ -33,11 +33,11 @@ const baseColumns = [
         dataIndex: 'content',
     },
     {
-        title: 'Category Id',
+        title: 'Danh mục',
         dataIndex: 'categoryId',
     },
     {
-        title: 'User Id',
+        title: 'Người đăng',
         dataIndex: 'userId',
     },
     {
@@ -58,8 +58,8 @@ function transformData(dt, navigate, setIsDetailOpen, setIsDisableOpen) {
             date: new Date(item.date)?.toLocaleString(),
             title: item.title,
             content: item.content,
-            categoryId: item.categoryId,
-            userId: item.userId,
+            categoryId: item.categoryId.name,
+            userId: item.userId.name,
             likeCount: item.likeCount,
             image: (
                 <img
@@ -69,14 +69,14 @@ function transformData(dt, navigate, setIsDetailOpen, setIsDisableOpen) {
             ),
             action: (
                 <div className="action-btn flex gap-3">
-                    <Button
+                    {/* <Button
                         className="text-green-500 border border-green-500"
                         onClick={() =>
                             navigate(`${config.routes.admin.Post}/${item.id}`)
                         }
                     >
                         <FontAwesomeIcon icon={faEdit} />
-                    </Button>
+                    </Button> */}
                     <Button
                         className={'text-red-500 border border-red-500'}
                         onClick={() => setIsDisableOpen({ id: item.id, isOpen: true })}

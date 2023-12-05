@@ -2,12 +2,12 @@ const UserChatItem = ({ userChat, chosenUserChat }) => {
     return (
         <div
             className={`${
-                chosenUserChat?.post1?.userId?.id === userChat?.post1?.userId?.id && 'bg-indigo-50'
+                chosenUserChat && chosenUserChat?.post1?.userId?.id === userChat?.post1?.userId?.id && 'bg-indigo-50'
             } my-3 flex items-stretch justify-between gap-5 px-5  py-3 transition-all rounded-sm max-md:justify-center max-md:mb-10`}
         >
             <div
                 className={`${
-                    chosenUserChat?.post1?.userId?.id === userChat?.post1?.userId?.id &&
+                    chosenUserChat && chosenUserChat?.post1?.userId?.id === userChat?.post1?.userId?.id &&
                     'bg-violet-700'
                 } flex w-1 shrink-0 h-24 flex-col rounded-sm`}
             />
@@ -23,8 +23,6 @@ const UserChatItem = ({ userChat, chosenUserChat }) => {
                 </h2>
                 <p className="text-gray-500 text-xl font-bold leading-6 whitespace-nowrap">
                     <a
-                        href="https://bunz.com/chats/85223"
-                        target="_blank"
                         rel="noopener noreferrer"
                     >
                         {userChat?.post1?.title}

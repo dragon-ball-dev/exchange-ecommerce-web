@@ -38,15 +38,15 @@ const UserInfo = ({data, refetch}) => {
                     </div>
                 </div>
             </header>
-            <div className="items-stretch flex w-[188px] max-w-full flex-col mt-4 px-5 self-start">
+            <div className="flex w-[188px] max-w-full gap-[5rem] mt-4 px-5 items-center">
                 <div className="text-gray-800 text-2xl font-bold leading-6 whitespace-nowrap -mr-5">
                     Trade by
                 </div>
                 <div className="justify-between items-stretch flex gap-2 -mr-5 mt-2">
                     <img
                         loading="lazy"
-                        srcSet="https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&width=100 100w, https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&width=200 200w, https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&width=400 400w, https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&width=800 800w, https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&width=1200 1200w, https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&width=1600 1600w, https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&width=2000 2000w, https://cdn.builder.io/api/v1/image/assets/TEMP/a4e27c28-93a1-4508-a8ac-e6c3918b1a75?apiKey=b570640ca9b549a79647f94d6104bae5&"
-                        className="aspect-square object-contain object-center w-[74px] justify-center items-center overflow-hidden shrink-0 max-w-full"
+                        src={data?.userId?.imageUrl}
+                        className="aspect-square border border-solid rounded-full object-contain object-center w-[74px] justify-center items-center overflow-hidden shrink-0 max-w-full"
                         alt=""
                     />
                     <div className="text-gray-800 text-xl font-bold leading-7 self-center whitespace-nowrap my-auto">
@@ -54,7 +54,7 @@ const UserInfo = ({data, refetch}) => {
                             href=""
                             rel="noopener noreferrer"
                         >
-                            Jen McLean
+                            {data?.userId?.name}
                         </a>
                     </div>
                 </div>

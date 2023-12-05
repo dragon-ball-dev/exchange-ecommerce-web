@@ -7,6 +7,7 @@ import com.ecommerce.backend.domain.payload.request.ScheduleExchangeRequest;
 import com.ecommerce.backend.domain.payload.request.UpdateTransactionStatusRequest;
 import org.springframework.data.domain.Page;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public interface TransactionService {
@@ -15,7 +16,8 @@ public interface TransactionService {
     void updateTransaction(Long id, TransactionDTO transactionDTO);
     void updateTransactionStatus(Long id, UpdateTransactionStatusRequest request);
     Page<Transaction> getListTransactionByUser(Integer pageNo, Integer pageSize);
+    Transaction getTransactionById(Long id);
     void scheduleAnExchange(Long id, ScheduleExchangeRequest scheduleExchangeRequest);
-    LocalDateTime getDateByIdTransaction(Long id);
+    Instant getDateByIdTransaction(Long id);
 
 }

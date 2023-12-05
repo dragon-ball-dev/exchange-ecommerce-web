@@ -6,8 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import './category.scss';
 import config from '../../../config';
-import { useCreateCategory, useGetCategory } from '../../../hooks/api/useCategoryApi';
-
+import {
+    useCreateCategory,
+    useGetCategory,
+    useUpdateCategory,
+} from '../../../hooks/api/useCategoryApi';
 
 function CategoryFormPage() {
     const navigate = useNavigate();
@@ -15,6 +18,14 @@ function CategoryFormPage() {
     const { isLoading: isLoadingCategory, data: category } = id
         ? useGetCategory(id)
         : { isLoading: null, data: null };
+
+
+    useEffect(() => {
+        if(!category) return;
+        form.setFieldsValue({
+            name: category?.data?.name,
+        });
+    }, [category]);
     const [form] = Form.useForm();
     const mutateAdd = useCreateCategory({
         success: () => {
@@ -30,12 +41,34 @@ function CategoryFormPage() {
         },
     });
 
+    const mutateEdit = useUpdateCategory({
+        success: () => {
+            notification.success({
+                message: 'Cập nhật thành công',
+            });
+            navigate(config.routes.admin.category);
+        },
+        error: () => {
+            notification.error({
+                message: 'Cập nhật thất bại',
+            });
+        },
+    });
+
     const onFinish = async () => {
-        await mutateAdd.mutateAsync({
-            id: id,
-            name: form.getFieldValue('name'),
-        });
-    }
+        if (id) {
+            await mutateEdit.mutateAsync({
+                id: id,
+                body: {
+                    name: form.getFieldValue('name'),
+                },
+            });
+        } else {
+            await mutateAdd.mutateAsync({
+                name: form.getFieldValue('name'),
+            });
+        }
+    };
 
     return (
         <div className="form-container">
@@ -52,7 +85,7 @@ function CategoryFormPage() {
             <div className="flex items-center justify-start rounded-xl shadow text-[1.6rem] text-black gap-[1rem] bg-white p-7">
                 <div className="flex flex-col gap-[1rem]">
                     <p>ID</p>
-                    <code className="bg-blue-100 p-2">{category?.id || '_'}</code>
+                    <code className="bg-blue-100 p-2">{category?.data?.id || '_'}</code>
                 </div>
             </div>
             <div className="bg-white p-7 mt-5 rounded-xl shadow">
@@ -83,10 +116,7 @@ function CategoryFormPage() {
                     </Row>
                     <div className="flex justify-between items-center gap-[1rem]">
                         <Button className="min-w-[10%]">Đặt lại</Button>
-                        <Button
-                            htmlType='submit'
-                            className="bg-blue-500 text-white min-w-[10%]"
-                        >
+                        <Button htmlType="submit" className="bg-blue-500 text-white min-w-[10%]">
                             {id ? 'Cập nhật' : 'Thêm mới'}
                         </Button>
                     </div>

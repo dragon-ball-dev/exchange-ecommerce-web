@@ -72,9 +72,9 @@ public class PostServiceImp extends BaseService implements PostService {
 
 
     @Override
-    public PostDTO getPostById(Long id) {
+    public Post getPostById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Post is not exist!"));
-        return mapper.convertToResponse(post, PostDTO.class);
+        return post;
     }
 
     @Override

@@ -137,4 +137,21 @@ public class TransactionController extends BaseController {
     public ResponseEntity<?> getDateByIdTransaction(@PathVariable Long id) {
         return createSuccessResponse("Get date of transaction", transactionService.getDateByIdTransaction(id));
     }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get transaction by id")
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_OK_STR, description = "Get paging of transaction successful",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_BAD_REQUEST_STR, description = "Input invalid",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+    @ApiResponse(responseCode = Constant.API_RESPONSE.API_STATUS_INTERNAL_SERVER_ERROR_STR, description = "Internal Server Error",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ExtendedMessage.class))})
+
+    public ResponseEntity<?> getByIdTransaction(@PathVariable Long id) {
+        return createSuccessResponse("Get transaction by id", transactionService.getTransactionById(id));
+    }
+
 }
